@@ -52,7 +52,7 @@ const LoginPage = () => {
             }}
         />
         <ThemeProvider theme={theme}>
-        <Button variant="outlined" color='neutral'>Outlined</Button>
+            <Button variant="outlined" color='neutral'>LOG IN</Button>
         </ThemeProvider>
     </Box>
     )
