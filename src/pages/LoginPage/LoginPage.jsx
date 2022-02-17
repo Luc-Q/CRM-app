@@ -31,7 +31,9 @@ const Box = styled.div`
     padding-top: 10px;
     width: 50%;
 `
-const LoginPage = () => {
+const LoginPage = ({
+    onFetch,
+}) => {
     return (
     <Box>
         <TextField label="Email" variant="outlined" required
@@ -52,7 +54,7 @@ const LoginPage = () => {
             }}
         />
         <ThemeProvider theme={theme}>
-            <Button variant="outlined" color='neutral'>LOG IN</Button>
+            <Button variant="outlined" color='neutral' onClick={onFetch}>LOG IN</Button>
         </ThemeProvider>
     </Box>
     )
