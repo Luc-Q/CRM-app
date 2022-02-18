@@ -32,7 +32,8 @@ const Box = styled.div`
     width: 50%;
 `
 const LoginPage = ({
-    onFetch,
+    onPost,
+    onGet
 }) => {
     return (
     <Box>
@@ -54,7 +55,8 @@ const LoginPage = ({
             }}
         />
         <ThemeProvider theme={theme}>
-            <Button variant="outlined" color='neutral' onClick={onFetch}>LOG IN</Button>
+            <Button variant="outlined" color='neutral' onClick={onPost}>LOG IN</Button>
+            <Button variant="outlined" color='neutral' onClick={onGet}>GET</Button>
         </ThemeProvider>
     </Box>
     )
