@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -33,7 +34,8 @@ const Box = styled.div`
 `
 const LoginPage = ({
     onPost,
-    onGet
+    onGet,
+    onGetUsers
 }) => {
     return (
     <Box>
@@ -57,6 +59,7 @@ const LoginPage = ({
         <ThemeProvider theme={theme}>
             <Button variant="outlined" color='neutral' onClick={onPost}>LOG IN</Button>
             <Button variant="outlined" color='neutral' onClick={onGet}>GET</Button>
+            <Link to='/userslist' onClick={onGetUsers}>UsersList</Link>
         </ThemeProvider>
     </Box>
     )

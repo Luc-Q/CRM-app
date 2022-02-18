@@ -1,4 +1,8 @@
+import React from 'react';
+import { Routes, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage/LoginPage';
+import UsersList from "./pages/UsersList/UsersList";
+import MalihAuth from './apis/MalihAuth';
 
 function App() {
   const payload = {
@@ -6,39 +10,8 @@ function App() {
     "password": "malihmail",
   }
 
-  // const fetchHandler = () => {
-  //   fetch('http://malih-auth.ap-southeast-2.elasticbeanstalk.com/api/v1/auth/signin', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(data)
-  //   })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     console.log('Success', data)
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error', error)
-  //   })
-  // }
-
-  const axios = require('axios')
-
-  const instance = axios.create({
-    baseURL: 'http://malih-auth.ap-southeast-2.elasticbeanstalk.com/api/v1/'
-  });
-
-  instance.interceptors.request.use(
-    (config) => {
-      config.headers.Authorization = `${getTokenType()} ${getToken() ? getToken() : ""}`;
-      config.headers.tenantReference = getTRef() ? getTRef() : "";
-      return config;
-    }
-  )
-
   const postHandler = () => {
-    instance.post('auth/signin', payload)
+    MalihAuth.post('auth/signin', payload)
     .then((response) => {
       console.log(response)
       localStorage.setItem('tokenType', response.data.tokenType)
@@ -50,35 +23,28 @@ function App() {
   }
 
   const getHandler = () => {
-    instance.get('getUserState/id/23')
+    MalihAuth.get('getUserState/id/23')
     .then((response) => {
       console.log(response)
-      localStorage.setItem('tRef', response.data.tenantReference)
+      localStorage.setItem('tRef', response.data.data.tenantReference)
     })
     .catch((error) => {
       console.log(error)
     })
     .then(() => {
-      localStorage.removeItem('token')
+
     });
   }
 
-  const getTokenType = () => { 
-    return localStorage.getItem('tokenType')
-  }
+  const getUserHandler = () => {
 
-  const getToken = () => {
-    return localStorage.getItem('token')
-  }
-
-  const getTRef = () => {
-    return localStorage.getItem('tRef')
   }
 
   return (
-    <div className="App">
-      <LoginPage onPost={postHandler} onGet={getHandler}/>
-    </div>
+    <Routes>
+      <Route path='/' element={<LoginPage onPost={postHandler} onGet={getHandler} onGetUsers={getUserHandler} />} />
+      <Route path='/userslist' element={<UsersList />} />
+    </Routes>
   );
 }
 
