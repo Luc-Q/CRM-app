@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -9,7 +9,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MalihAuth from '../../apis/MalihAuth';
-
+import { authActions } from '../../store';
 
 const theme = createTheme({
     status: {
@@ -35,14 +35,12 @@ const Box = styled.div`
     padding-top: 10px;
     width: 50%;
 `
-const LoginPage = ({
-    onGetUsers
-}) => {
+const LoginPage = () => {
     const dispatch = useDispatch()
-
+    const isAuth = useSelector((state) => state.isAuthed)
+    
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [isLogin, setIsLogin] = useState(false)
 
     const onEmailChangeHandler = (event) => {
         setEmail(event.target.value)
@@ -70,9 +68,7 @@ const LoginPage = ({
             console.log(error)
         })
 
-        setIsLogin(true)
-
-        console.log('continue')
+        dispatch(authActions.login())
     }
 
     useEffect(() => {
@@ -87,7 +83,11 @@ const LoginPage = ({
         .then(() => {
             console.log('All good')
         });
-    }, [isLogin])
+    }, [isAuth])
+
+    const onLogOutHandler = () => {
+        dispatch(authActions.logout())
+    }
 
     return (
     <form onSubmit={onSubmitHandler}>
@@ -111,8 +111,11 @@ const LoginPage = ({
             />
             <ThemeProvider theme={theme}>
                 <Button type="submit" variant="outlined" color='neutral'>LOG IN</Button>
+                {isAuth && <Button variant='outlined' color='neutral' onClick={onLogOutHandler}>
+                        LOG OUT
+                    </Button>}
                 <Link to='/userslist' style={{ textDecoration:'none'}}>
-                    {isLogin && <Button variant='outlined' color='neutral'>
+                    {isAuth && <Button variant='outlined' color='neutral'>
                         UsersList
                     </Button>}
                 </Link>
