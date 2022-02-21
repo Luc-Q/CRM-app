@@ -38,6 +38,12 @@ const columns = [
 const UsersList = () => {
     const [users, setUsers] = useState([])
 
+    const handler = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('tokenType')
+        localStorage.removeItem('tRef')
+    }
+
     useEffect(() => {
         MalihAuth.get('getAllUploadedEmails/listId/480')
         .then((response) => {
@@ -49,15 +55,17 @@ const UsersList = () => {
             setUsers(data)
         })
     }, [])
+
     return (
     <div style={{height:700, with: '100%'}}>
         <DataGrid
             key={users.id}
             rows={users}
             columns={columns}
-            pageSize={10}
+            pageSize={20}
             checkboxSelection
         />
+        <button onClick={handler}>REMOVE</button>
     </div>
     )
 }

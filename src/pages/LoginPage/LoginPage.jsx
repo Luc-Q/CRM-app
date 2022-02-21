@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -7,6 +8,8 @@ import Button from '@mui/material/Button';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MalihAuth from '../../apis/MalihAuth';
+
 
 const theme = createTheme({
     status: {
@@ -33,35 +36,89 @@ const Box = styled.div`
     width: 50%;
 `
 const LoginPage = ({
-    onPost,
-    onGet,
     onGetUsers
 }) => {
+    const dispatch = useDispatch()
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [isLogin, setIsLogin] = useState(false)
+
+    const onEmailChangeHandler = (event) => {
+        setEmail(event.target.value)
+    }
+
+    const onPasswordChangeHandler = (event) => {
+        setPassword(event.target.value)
+    }
+
+    const onSubmitHandler = async (event) => {
+        event.preventDefault()
+
+        const payload = {
+            "username": email,
+            "password": password,
+        }
+
+        await MalihAuth.post('auth/signin', payload)
+        .then((response) => {
+            console.log(response)
+            localStorage.setItem('tokenType', response.data.tokenType)
+            localStorage.setItem('token', response.data.accessToken)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+        setIsLogin(true)
+
+        console.log('continue')
+    }
+
+    useEffect(() => {
+        MalihAuth.get('getUserState/id/23')
+        .then((response) => {
+            console.log(response)
+            localStorage.setItem('tRef', response.data.data.tenantReference)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+        .then(() => {
+            console.log('All good')
+        });
+    }, [isLogin])
+
     return (
-    <Box>
-        <TextField label="Email" variant="outlined" required
-            InputProps={{
-                startAdornment: (
-                <InputAdornment position="start">
-                    <EmailIcon />
-                </InputAdornment>
-                ),}}
-        />
-        <TextField label="Password" variant="outlined" required
-            InputProps={{
-                startAdornment: (
-                <InputAdornment position="start">
-                    <LockIcon />
-                </InputAdornment>
-                ),
-            }}
-        />
-        <ThemeProvider theme={theme}>
-            <Button variant="outlined" color='neutral' onClick={onPost}>LOG IN</Button>
-            <Button variant="outlined" color='neutral' onClick={onGet}>GET</Button>
-            <Link to='/userslist' onClick={onGetUsers}>UsersList</Link>
-        </ThemeProvider>
-    </Box>
+    <form onSubmit={onSubmitHandler}>
+        <Box>
+            <TextField label="Email" variant="outlined" required value={email} onChange={onEmailChangeHandler}
+                InputProps={{
+                    startAdornment: (
+                    <InputAdornment position="start">
+                        <EmailIcon />
+                    </InputAdornment>
+                    ),}}
+            />
+            <TextField label="Password" variant="outlined" required value={password} onChange={onPasswordChangeHandler}
+                InputProps={{
+                    startAdornment: (
+                    <InputAdornment position="start">
+                        <LockIcon />
+                    </InputAdornment>
+                    ),
+                }}
+            />
+            <ThemeProvider theme={theme}>
+                <Button type="submit" variant="outlined" color='neutral'>LOG IN</Button>
+                <Link to='/userslist' style={{ textDecoration:'none'}}>
+                    {isLogin && <Button variant='outlined' color='neutral'>
+                        UsersList
+                    </Button>}
+                </Link>
+            </ThemeProvider>
+        </Box>
+    </form>
     )
 }
 
