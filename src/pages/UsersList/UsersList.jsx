@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import MalihAuth from '../../apis/MalihAuth'
+import { useSelector, useDispatch } from 'react-redux';
+import { authActions } from '../../store';
 
 const columns = [
     {field: 'id', headerName: 'ID', width: 80},
@@ -36,13 +38,10 @@ const columns = [
 ]
 
 const UsersList = () => {
+    const dispatch = useDispatch()
     const [users, setUsers] = useState([])
 
-    const handler = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('tokenType')
-        localStorage.removeItem('tRef')
-    }
+    const isAuth = useSelector((state) => state.isAuthed) 
 
     useEffect(() => {
         MalihAuth.get('getAllUploadedEmails/listId/480')
@@ -56,16 +55,23 @@ const UsersList = () => {
         })
     }, [])
 
+    const onLogOutHandler = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('tokenType')
+        localStorage.removeItem('tRef')
+        dispatch(authActions.logout())
+    }
+
     return (
     <div style={{height:700, with: '100%'}}>
-        <DataGrid
+        {isAuth && <DataGrid
             key={users.id}
             rows={users}
             columns={columns}
             pageSize={20}
             checkboxSelection
-        />
-        <button onClick={handler}>REMOVE</button>
+        />}
+        <Button variant="contained" onClick={onLogOutHandler}>LOG OUT</Button>
     </div>
     )
 }
