@@ -17,10 +17,35 @@ const authSlice = createSlice({
     }
 })
 
+const initialTokenState ={
+    tokenType: '',
+    token: ''
+}
+
+const tokenSlice = createSlice({
+    name: 'token',
+    initialState: initialTokenState,
+    reducers: {
+        removeTokenType: (state) => {
+            state.tokenType = localStorage.removeItem('tokenType')
+        },
+        removeToken: (state) => {
+            state.token = localStorage.removeItem('token')
+        },
+        removeTRef: (state) => {
+            state.token = localStorage.removeItem('tRef')
+        },
+        removeAll: (state) => {
+            state.token = localStorage.clear()
+        }
+    }
+})
+
 const store = configureStore({
-    reducer: authSlice.reducer
+    reducer: {auth: authSlice.reducer, token: tokenSlice.reducer}
 })
 
 export const authActions = authSlice.actions
+export const tokenActions = tokenSlice.actions
 
 export default store

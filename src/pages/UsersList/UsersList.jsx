@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import MalihAuth from '../../apis/MalihAuth'
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions } from '../../store';
-
+import { tokenActions } from '../../store';
 const columns = [
     {field: 'id', headerName: 'ID', width: 80},
     {field: 'name', headerName: 'Name', width: 130},
@@ -13,7 +13,7 @@ const columns = [
     {field: 'address', headerName: 'Address', width: 400},
     {field: 'jobTitle', headerName: 'Job Title', width: 150},
     {
-        field: 'aedit',
+        field: 'edit',
         headerName: 'Edit',
         width: 100,
         renderCell: () => {
@@ -21,7 +21,7 @@ const columns = [
                 e.stopPropagation()
         };
     
-        return <Button onClick={onClick} variant="outlined">Click</Button>
+        return <Button onClick={onClick} variant="outlined">Edit</Button>
         },
     },
     {
@@ -32,7 +32,7 @@ const columns = [
             const onClick = (e) => {
                 e.stopPropagation()
         }
-        return <Button onClick={onClick} variant="contained">Click</Button>
+        return <Button onClick={onClick} variant="contained">View</Button>
         },
     },
 ]
@@ -41,9 +41,10 @@ const UsersList = () => {
     const dispatch = useDispatch()
     const [users, setUsers] = useState([])
 
-    const isAuth = useSelector((state) => state.isAuthed) 
+    const isAuth = useSelector((state) => state.auth.isAuthed) 
 
     useEffect(() => {
+        console.log(isAuth)
         MalihAuth.get('getAllUploadedEmails/listId/480')
         .then((response) => {
             const data = response.data
@@ -53,12 +54,21 @@ const UsersList = () => {
             console.log(data)
             setUsers(data)
         })
-    }, [])
+
+        let user = localStorage.getItem('token')
+        console.log(user)
+        if (user != null) {
+            dispatch(authActions.login())
+            setTimeout(() => {
+                console.log('time out')
+                dispatch(tokenActions.removeAll())
+                dispatch(authActions.logout())
+            }, 10000)
+        }
+    }, [isAuth])
 
     const onLogOutHandler = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem('tokenType')
-        localStorage.removeItem('tRef')
+        dispatch(tokenActions.removeAll())
         dispatch(authActions.logout())
     }
 
