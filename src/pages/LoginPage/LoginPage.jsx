@@ -10,6 +10,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MalihAuth from '../../apis/MalihAuth';
 import { authActions } from '../../store';
+import { tokenActions } from '../../store';
 
 const theme = createTheme({
     status: {
@@ -37,7 +38,7 @@ const Box = styled.div`
 `
 const LoginPage = () => {
     const dispatch = useDispatch()
-    const isAuth = useSelector((state) => state.isAuthed)
+    const isAuth = useSelector((state) => state.auth.isAuthed)
     
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -61,12 +62,15 @@ const LoginPage = () => {
         await MalihAuth.post('auth/signin', payload)
         .then((response) => {
             console.log(response)
-            localStorage.setItem('tokenType', response.data.tokenType)
             localStorage.setItem('token', response.data.accessToken)
+            localStorage.setItem('tokenType', response.data.tokenType)
         })
         .catch((error) => {
             console.log(error)
         })
+        .then(
+
+        )
 
         dispatch(authActions.login())
     }
@@ -81,11 +85,22 @@ const LoginPage = () => {
             console.log(error)
         })
         .then(() => {
-            console.log('All good')
+
         });
+
+        let user = localStorage.getItem('token')
+        if (user && isAuth) {
+            dispatch(authActions.login())
+            setTimeout(() => {
+                console.log('time out')
+                dispatch(tokenActions.removeAll())
+                dispatch(authActions.logout())
+            }, 15000)
+        }
     }, [isAuth])
 
     const onLogOutHandler = () => {
+        dispatch(tokenActions.removeAll())
         dispatch(authActions.logout())
     }
 
