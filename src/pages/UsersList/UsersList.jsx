@@ -1,10 +1,28 @@
 import React, { useEffect } from 'react'
 import { Link } from "react-router-dom";
+import styled from 'styled-components';
+import Fab from '@mui/material/Fab';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions, tokenActions } from '../../store';
 import { getData } from '../../store/actions';
+
+const Box = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    position: relative;
+`
+const IconBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 999;
+    left: 95%;
+    top: 75%;
+`
 
 const columns = [
     {field: 'id', headerName: 'ID', width: 80},
@@ -66,18 +84,27 @@ const UsersList = () => {
     }
 
     return (
-    <div style={{height:700, with: '100%'}}>
-        {isAuth && <DataGrid
-            key={users.id}
-            rows={users}
-            columns={columns}
-            pageSize={20}
-            checkboxSelection
-        />}
-        <Link to='/' style={{ textDecoration: 'none'}}>
-            <Button variant="contained" onClick={onLogOutHandler}>LOG OUT</Button>
-        </Link>
-    </div>
+        <Box style={{height: 700, with: '100%'}}>
+            {/* {isAuth &&  */}
+            <DataGrid
+                key={users.id}
+                rows={users}
+                columns={columns}
+                pageSize={15}
+                checkboxSelection
+            />
+            <IconBox>
+            <Link to='/' style={{ textDecoration: 'none'}}>
+                <Fab color="primary" aria-label="add" onClick={onLogOutHandler}>
+                    <AddIcon />
+                </Fab>
+            </Link>
+                <Fab color="primary" aria-label="add">
+                    <AddIcon />
+                </Fab>
+            </IconBox>
+            {/* </DataGrid> */}
+        </Box>
     )
 }
 
