@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import Fab from '@mui/material/Fab';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -18,6 +19,7 @@ const Box = styled.div`
 const IconBox = styled.div`
     display: flex;
     flex-direction: column;
+    gap: 5px;
     position: absolute;
     z-index: 999;
     left: 95%;
@@ -94,14 +96,14 @@ const UsersList = () => {
                 checkboxSelection
             />
             <IconBox>
-            <Link to='/' style={{ textDecoration: 'none'}}>
-                <Fab color="primary" aria-label="add" onClick={onLogOutHandler}>
+                <Fab color="primary" aria-label="add" size='small'>
                     <AddIcon />
+                </Fab>
+            <Link to='/' style={{ textDecoration: 'none'}}>
+                <Fab color="primary" aria-label="add" size='small' onClick={onLogOutHandler}> 
+                    <LogoutIcon />
                 </Fab>
             </Link>
-                <Fab color="primary" aria-label="add">
-                    <AddIcon />
-                </Fab>
             </IconBox>
             {/* </DataGrid> */}
         </Box>
