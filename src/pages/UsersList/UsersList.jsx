@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
-import MalihAuth from '../../apis/MalihAuth'
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from '../../store';
-import { tokenActions } from '../../store';
+import { authActions, tokenActions } from '../../store';
+import { getData } from '../../store/actions';
+
 const columns = [
     {field: 'id', headerName: 'ID', width: 80},
     {field: 'name', headerName: 'Name', width: 130},
@@ -39,33 +39,25 @@ const columns = [
 
 const UsersList = () => {
     const dispatch = useDispatch()
-    const [users, setUsers] = useState([])
 
     const isAuth = useSelector((state) => state.auth.isAuthed) 
+    const users = useSelector((state) => state.usersList.users)
 
     useEffect(() => {
-        console.log(isAuth)
-        MalihAuth.get('getAllUploadedEmails/listId/480')
-        .then((response) => {
-            const data = response.data
-            return data
-        })
-        .then((data) => {
-            console.log(data)
-            setUsers(data)
-        })
 
-        let user = localStorage.getItem('token')
+        dispatch(getData())
+        
+        const user = localStorage.getItem('token')
         console.log(user)
-        if (user != null) {
+        if (user !== null) {
             dispatch(authActions.login())
-            setTimeout(() => {
-                console.log('time out')
-                dispatch(tokenActions.removeAll())
-                dispatch(authActions.logout())
-            }, 10000)
+        //     setTimeout(() => {
+        //         console.log('time out')
+        //         dispatch(tokenActions.removeAll())
+        //         dispatch(authActions.logout())
+        //     }, 10000)
         }
-    }, [isAuth])
+    }, [isAuth, dispatch])
 
     const onLogOutHandler = () => {
         dispatch(tokenActions.removeAll())

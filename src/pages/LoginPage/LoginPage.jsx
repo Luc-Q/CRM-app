@@ -8,9 +8,8 @@ import Button from '@mui/material/Button';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import MalihAuth from '../../apis/MalihAuth';
-import { authActions } from '../../store';
-import { tokenActions } from '../../store';
+import { authActions, tokenActions } from '../../store';
+import { getAccessToken} from '../../store/actions';
 
 const theme = createTheme({
     status: {
@@ -59,45 +58,22 @@ const LoginPage = () => {
             "password": password,
         }
 
-        await MalihAuth.post('auth/signin', payload)
-        .then((response) => {
-            console.log(response)
-            localStorage.setItem('token', response.data.accessToken)
-            localStorage.setItem('tokenType', response.data.tokenType)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-        .then(
-
-        )
+        dispatch(getAccessToken(payload))
 
         dispatch(authActions.login())
     }
 
     useEffect(() => {
-        MalihAuth.get('getUserState/id/23')
-        .then((response) => {
-            console.log(response)
-            localStorage.setItem('tRef', response.data.data.tenantReference)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-        .then(() => {
-
-        });
-
         let user = localStorage.getItem('token')
-        if (user && isAuth) {
+        if (user !== null) {
             dispatch(authActions.login())
-            setTimeout(() => {
-                console.log('time out')
-                dispatch(tokenActions.removeAll())
-                dispatch(authActions.logout())
-            }, 15000)
+        //     setTimeout(() => {
+        //         console.log('time out')
+        //         dispatch(tokenActions.removeAll())
+        //         dispatch(authActions.logout())
+        //     }, 15000)
         }
-    }, [isAuth])
+    }, [isAuth, dispatch])
 
     const onLogOutHandler = () => {
         dispatch(tokenActions.removeAll())

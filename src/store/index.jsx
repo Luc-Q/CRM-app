@@ -17,7 +17,7 @@ const authSlice = createSlice({
     }
 })
 
-const initialTokenState ={
+const initialTokenState = {
     tokenType: '',
     token: ''
 }
@@ -41,11 +41,26 @@ const tokenSlice = createSlice({
     }
 })
 
+const initialUsersListState = {
+    users: []
+}
+
+const usersListSlice = createSlice({
+    name: 'userList',
+    initialState: initialUsersListState,
+    reducers: {
+        setUser: (state, action) => {
+            state.users = action.payload
+        }
+    }
+})
+
 const store = configureStore({
-    reducer: {auth: authSlice.reducer, token: tokenSlice.reducer}
+    reducer: {auth: authSlice.reducer, token: tokenSlice.reducer, usersList: usersListSlice.reducer}
 })
 
 export const authActions = authSlice.actions
 export const tokenActions = tokenSlice.actions
+export const usersActions = usersListSlice.actions
 
 export default store
