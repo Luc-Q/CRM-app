@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link } from "react-router-dom";
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import { useSelector, useDispatch } from 'react-redux';
@@ -73,7 +74,9 @@ const UsersList = () => {
             pageSize={20}
             checkboxSelection
         />}
-        <Button variant="contained" onClick={onLogOutHandler}>LOG OUT</Button>
+        <Link to='/' style={{ textDecoration: 'none'}}>
+            <Button variant="contained" onClick={onLogOutHandler}>LOG OUT</Button>
+        </Link>
     </div>
     )
 }

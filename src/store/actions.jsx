@@ -33,7 +33,6 @@ export const getData = () => {
 
         try {
         const userData = await sendGetRequest()
-        // console.log(data)
         dispatch(usersActions.setUser(userData))
         } catch(error) {
             console.log(error)
