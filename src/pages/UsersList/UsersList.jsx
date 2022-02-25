@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions, tokenActions } from '../../store';
 import { getData } from '../../store/actions';
+import FormModal from '../../components/Modal.jsx/FormModal';
 
 const Box = styled.div`
     display: flex;
@@ -60,6 +61,9 @@ const columns = [
 
 const UsersList = () => {
     const dispatch = useDispatch()
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const isAuth = useSelector((state) => state.auth.isAuthed) 
     const users = useSelector((state) => state.usersList.users)
@@ -106,6 +110,7 @@ const UsersList = () => {
             </Link>
             </IconBox>
             {/* </DataGrid> */}
+            <FormModal onOpen={handleOpen} onClose={handleClose}/>
         </Box>
     )
 }
