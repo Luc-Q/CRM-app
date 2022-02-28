@@ -10,6 +10,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { authActions, tokenActions } from '../../store';
 import { getAccessToken} from '../../store/actions';
+import validator from 'validator';
 
 const theme = createTheme({
     status: {
@@ -41,6 +42,8 @@ const LoginPage = () => {
     
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState(false)
+    // const [loading, setLoading] = useState(false)
 
     const onEmailChangeHandler = (event) => {
         setEmail(event.target.value)
@@ -50,17 +53,28 @@ const LoginPage = () => {
         setPassword(event.target.value)
     }
 
-    const onSubmitHandler = async (event) => {
+    const onSubmitHandler = (event) => {
         event.preventDefault()
+        const emailIsValied = emailValidation()
+        setError(!emailIsValied)
 
         const payload = {
             "username": email,
             "password": password,
         }
 
-        dispatch(getAccessToken(payload))
+        console.log(payload)
 
-        dispatch(authActions.login())
+        if (emailIsValied) {
+            dispatch(getAccessToken(payload))
+            dispatch(authActions.login())
+        }
+    }
+
+    const emailValidation = () => {
+        let emailIsValied = validator.isEmail(email)
+        console.log(emailIsValied)
+        return emailIsValied
     }
 
     useEffect(() => {
@@ -83,7 +97,14 @@ const LoginPage = () => {
     return (
     <form onSubmit={onSubmitHandler}>
         <Box>
-            <TextField label="Email" variant="outlined" required value={email} onChange={onEmailChangeHandler}
+            <TextField 
+                label="Email" 
+                variant="outlined" 
+                required 
+                value={email} 
+                onChange={onEmailChangeHandler} 
+                error={error} 
+                helperText={error ? 'Please enter valid email adress' : ''}
                 InputProps={{
                     startAdornment: (
                     <InputAdornment position="start">
@@ -91,7 +112,12 @@ const LoginPage = () => {
                     </InputAdornment>
                     ),}}
             />
-            <TextField label="Password" variant="outlined" required value={password} onChange={onPasswordChangeHandler}
+            <TextField 
+                label="Password" 
+                variant="outlined" 
+                required 
+                value={password} 
+                onChange={onPasswordChangeHandler}
                 InputProps={{
                     startAdornment: (
                     <InputAdornment position="start">

@@ -39,3 +39,18 @@ export const getData = () => {
         }
     }
 }
+
+export const postUser = (payload) => {
+    return async dispatch => {
+        const sendPostRequest = async () => {
+            const res = await MalihAuth.post('emailUpload', payload) 
+            console.log(res)
+        }
+
+        try{
+            await sendPostRequest()
+        } catch(error) {
+            console.log(error)
+        }
+    }
+}

@@ -97,7 +97,6 @@ const UsersList = () => {
 
     return (
         <Box style={{height: 700, with: '100%'}}>
-            {/* {isAuth &&  */}
             <DataGrid
                 key={users.id}
                 rows={users}
@@ -109,13 +108,12 @@ const UsersList = () => {
                 <Fab color="primary" aria-label="add" size='small' onClick={openModalHandler}>
                     <AddIcon />
                 </Fab>
-            <Link to='/' style={{ textDecoration: 'none'}}>
-                <Fab color="primary" aria-label="add" size='small' onClick={onLogOutHandler}> 
-                    <LogoutIcon />
-                </Fab>
-            </Link>
+                <Link to='/' style={{ textDecoration: 'none'}}>
+                    <Fab color="primary" aria-label="add" size='small' onClick={onLogOutHandler}> 
+                        <LogoutIcon />
+                    </Fab>
+                </Link>
             </IconBox>
-            {/* </DataGrid> */}
             {isShow && <FormModal isShow={isShow} ishide={closeModalHandler} />}
         </Box>
     )
