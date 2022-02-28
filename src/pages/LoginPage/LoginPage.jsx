@@ -44,6 +44,7 @@ const LoginPage = () => {
 
     const onEmailChangeHandler = (event) => {
         setEmail(event.target.value)
+        console.log(email)
     }
 
     const onPasswordChangeHandler = (event) => {
