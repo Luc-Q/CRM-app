@@ -63,8 +63,6 @@ const LoginPage = () => {
             "password": password,
         }
 
-        console.log(payload)
-
         if (emailIsValied) {
             dispatch(getAccessToken(payload))
             dispatch(authActions.login())
@@ -73,7 +71,6 @@ const LoginPage = () => {
 
     const emailValidation = () => {
         let emailIsValied = validator.isEmail(email)
-        console.log(emailIsValied)
         return emailIsValied
     }
 

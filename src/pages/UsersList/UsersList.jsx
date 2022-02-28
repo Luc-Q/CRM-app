@@ -65,13 +65,13 @@ const UsersList = () => {
     const isAuth = useSelector((state) => state.auth.isAuthed) 
     const users = useSelector((state) => state.usersList.users)
     const isShow = useSelector((state) => state.modal.isShowed)
+    const isRefresh = useSelector((state) => state.page.refresh)
 
     useEffect(() => {
 
         dispatch(getData())
         
         const user = localStorage.getItem('token')
-        console.log(user)
         if (user !== null) {
             dispatch(authActions.login())
         //     setTimeout(() => {
@@ -80,7 +80,7 @@ const UsersList = () => {
         //         dispatch(authActions.logout())
         //     }, 10000)
         }
-    }, [isAuth, dispatch])
+    }, [isAuth, isRefresh, dispatch])
 
     const onLogOutHandler = () => {
         dispatch(tokenActions.removeAll())

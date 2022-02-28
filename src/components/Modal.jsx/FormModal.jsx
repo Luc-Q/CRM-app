@@ -15,6 +15,7 @@ import Button from '@mui/material/Button';
 import validator from 'validator';
 import { useDispatch } from 'react-redux';
 import { postUser } from '../../store/actions';
+import { modalActions } from '../../store';
 
 const InputBox = styled.div`
   display: flex;
@@ -53,7 +54,6 @@ const FormModal = ({
 
   const emailValidation = () => {
     let emailIsValied = validator.isEmail(email)
-    console.log(emailIsValied)
     return emailIsValied
   }
 
@@ -77,34 +77,25 @@ const FormModal = ({
     setJob(event.target.value)
   }
 
-  const phoneValidation = () => {
-    let phoneIsValied = validator.isMobilePhone(phone, 'en-AU')
-    console.log(phoneIsValied)
-    return phoneIsValied
-  }
-
   const onSubmitHandler = (event) => {
     event.preventDefault()
     const emailIsValied = emailValidation()
     setError(!emailIsValied)
-    const phoneIsValied = phoneValidation()
-    setError(!phoneIsValied)
 
-    const data = {
+
+    const payload = [{
       "name": name,
       "email": email,
-      // "address": address,
-      "phone": phone,
-      "job": job,
+      "address": address,
+      "phoneNumber": phone,
+      "jobTitle": job,
       "listId": 480
+    }]
+
+    if (emailIsValied) {
+      dispatch(postUser(payload))
+      dispatch(modalActions.hideModal())
     }
-
-    const payload = JSON.stringify(data)
-    console.log(payload)
-
-    // if (emailIsValied) {
-    //   dispatch(postUser(payload))
-    // }
 }
 
     return (
@@ -145,7 +136,7 @@ const FormModal = ({
                     </InputAdornment>
               ),}}/>
                 <Input>
-                  <TextField label="Phone Number" variant="outlined" required value={phone} onChange={onPhoneChangeHandler} error={error} helperText={error ? 'Please enter valid phone number' : ''}
+                  <TextField label="Phone Number" variant="outlined" required value={phone} onChange={onPhoneChangeHandler}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
