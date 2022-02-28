@@ -65,13 +65,13 @@ const UsersList = () => {
     const isAuth = useSelector((state) => state.auth.isAuthed) 
     const users = useSelector((state) => state.usersList.users)
     const isShow = useSelector((state) => state.modal.isShowed)
+    const isRefresh = useSelector((state) => state.page.refresh)
 
     useEffect(() => {
 
         dispatch(getData())
         
         const user = localStorage.getItem('token')
-        console.log(user)
         if (user !== null) {
             dispatch(authActions.login())
         //     setTimeout(() => {
@@ -80,7 +80,7 @@ const UsersList = () => {
         //         dispatch(authActions.logout())
         //     }, 10000)
         }
-    }, [isAuth, dispatch])
+    }, [isAuth, isRefresh, dispatch])
 
     const onLogOutHandler = () => {
         dispatch(tokenActions.removeAll())
@@ -97,7 +97,6 @@ const UsersList = () => {
 
     return (
         <Box style={{height: 700, with: '100%'}}>
-            {/* {isAuth &&  */}
             <DataGrid
                 key={users.id}
                 rows={users}
@@ -109,13 +108,12 @@ const UsersList = () => {
                 <Fab color="primary" aria-label="add" size='small' onClick={openModalHandler}>
                     <AddIcon />
                 </Fab>
-            <Link to='/' style={{ textDecoration: 'none'}}>
-                <Fab color="primary" aria-label="add" size='small' onClick={onLogOutHandler}> 
-                    <LogoutIcon />
-                </Fab>
-            </Link>
+                <Link to='/' style={{ textDecoration: 'none'}}>
+                    <Fab color="primary" aria-label="add" size='small' onClick={onLogOutHandler}> 
+                        <LogoutIcon />
+                    </Fab>
+                </Link>
             </IconBox>
-            {/* </DataGrid> */}
             {isShow && <FormModal isShow={isShow} ishide={closeModalHandler} />}
         </Box>
     )

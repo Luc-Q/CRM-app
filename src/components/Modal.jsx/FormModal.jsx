@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import styled from 'styled-components'
@@ -12,6 +12,10 @@ import WorkIcon from '@mui/icons-material/Work';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import validator from 'validator';
+import { useDispatch } from 'react-redux';
+import { postUser } from '../../store/actions';
+import { modalActions } from '../../store';
 
 const InputBox = styled.div`
   display: flex;
@@ -39,21 +43,76 @@ const FormModal = ({
   isShow,
   ishide,
 }) => {
+  const dispatch = useDispatch()
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [address, setAddress] = useState('')
+  const [phone, setPhone] = useState('')
+  const [job, setJob] = useState('')
+  const [error, setError] = useState(false)
+
+  const emailValidation = () => {
+    let emailIsValied = validator.isEmail(email)
+    return emailIsValied
+  }
+
+  const onNameChangeHandler = (event) => {
+    setName(event.target.value)
+  }
+
+  const onEmailChangeHandler = (event) => {
+    setEmail(event.target.value)
+  }
+
+  const onAddressChangeHandler = (event) => {
+    setAddress(event.target.value)
+  }
+
+  const onPhoneChangeHandler = (event) => {
+    setPhone(event.target.value)
+  }
+  
+  const onJobChangeHandler = (event) => {
+    setJob(event.target.value)
+  }
+
+  const onSubmitHandler = (event) => {
+    event.preventDefault()
+    const emailIsValied = emailValidation()
+    setError(!emailIsValied)
+
+
+    const payload = [{
+      "name": name,
+      "email": email,
+      "address": address,
+      "phoneNumber": phone,
+      "jobTitle": job,
+      "listId": 480
+    }]
+
+    if (emailIsValied) {
+      dispatch(postUser(payload))
+      dispatch(modalActions.hideModal())
+    }
+}
+
     return (
-      <form>
-        <Modal
+      <Modal
           open={isShow}
           onClose={ishide}
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
-        >
+      >
+        <form onSubmit={onSubmitHandler}>
           <Box sx={style}>
             <div>Add New Customer</div>
             <List>
               <Divider component="li" />
             </List>
             <InputBox>
-              <TextField label="Full Name" variant="outlined" requiredd
+              <TextField label="Full Name" variant="outlined" required value={name} onChange={onNameChangeHandler}
                 InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -61,7 +120,7 @@ const FormModal = ({
                   </InputAdornment>
                 ),}} 
               />
-              <TextField label="Email" variant="outlined" requiredd 
+              <TextField label="Email" variant="outlined" required value={email} onChange={onEmailChangeHandler} error={error} helperText={error ? 'Please enter valid email adress' : ''}
                 InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -69,7 +128,7 @@ const FormModal = ({
                   </InputAdornment>
                 ),}}
               />
-              <TextField label="Home Address" variant="outlined" requiredd 
+              <TextField label="Home Address" variant="outlined" required value={address} onChange={onAddressChangeHandler}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -77,14 +136,14 @@ const FormModal = ({
                     </InputAdornment>
               ),}}/>
                 <Input>
-                  <TextField label="Phone Number" variant="outlined" requiredd 
+                  <TextField label="Phone Number" variant="outlined" required value={phone} onChange={onPhoneChangeHandler}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <LocalPhoneIcon />
                     </InputAdornment>
                 ),}}/>
-                  <TextField label="Job Title" variant="outlined" requiredd 
+                  <TextField label="Job Title" variant="outlined" required value={job} onChange={onJobChangeHandler}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -98,11 +157,11 @@ const FormModal = ({
               </List>
                 <Input>
                   <Button variant='contained' onClick={ishide}>Cancel</Button>
-                  <Button variant='contained' type='submit'>Submit</Button>
+                  <Button type="submit" variant='contained'>Submit</Button>
                 </Input>
           </Box>
-        </Modal>
-      </form>
+        </form>
+      </Modal>
     )
 }
 

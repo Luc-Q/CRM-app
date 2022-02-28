@@ -1,5 +1,5 @@
 import MalihAuth from "../apis/MalihAuth"
-import { usersActions } from "./index"
+import { pageActions, usersActions } from "./index"
 
 export const getAccessToken = (payload) => {
     return async dispatch => {
@@ -33,7 +33,24 @@ export const getData = () => {
 
         try {
         const userData = await sendGetRequest()
-        dispatch(usersActions.setUser(userData))
+        const reverseUserData = userData.reverse()
+        dispatch(usersActions.setUser(reverseUserData))
+        } catch(error) {
+            console.log(error)
+        }
+    }
+}
+
+export const postUser = (payload) => {
+    return async dispatch => {
+        const sendPostRequest = async () => {
+            const res = await MalihAuth.post('emailUpload', payload) 
+            console.log(res)
+        }
+
+        try{
+            await sendPostRequest()
+            await dispatch(pageActions.refreshPage())
         } catch(error) {
             console.log(error)
         }
