@@ -55,12 +55,33 @@ const usersListSlice = createSlice({
     }
 })
 
+const initialMoadalState = {
+    isShowed: false
+}
+
+const modalSlice = createSlice({
+    name: 'moadal',
+    initialState: initialMoadalState,
+    reducers: {
+        printState: () => {
+            console.log('open')
+        },
+        showModal: (state) => {
+            state.isShowed = true
+        },
+        hideModal: (state) => {
+            state.isShowed = false
+        }
+    }
+})
+
 const store = configureStore({
-    reducer: {auth: authSlice.reducer, token: tokenSlice.reducer, usersList: usersListSlice.reducer}
+    reducer: {auth: authSlice.reducer, token: tokenSlice.reducer, usersList: usersListSlice.reducer, modal: modalSlice.reducer}
 })
 
 export const authActions = authSlice.actions
 export const tokenActions = tokenSlice.actions
 export const usersActions = usersListSlice.actions
+export const modalActions = modalSlice.actions
 
 export default store

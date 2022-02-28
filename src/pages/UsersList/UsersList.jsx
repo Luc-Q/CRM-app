@@ -7,7 +7,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions, tokenActions } from '../../store';
+import { authActions, modalActions, tokenActions } from '../../store';
 import { getData } from '../../store/actions';
 import FormModal from '../../components/Modal.jsx/FormModal';
 
@@ -64,6 +64,7 @@ const UsersList = () => {
 
     const isAuth = useSelector((state) => state.auth.isAuthed) 
     const users = useSelector((state) => state.usersList.users)
+    const isShow = useSelector((state) => state.modal.isShowed)
 
     useEffect(() => {
 
@@ -86,6 +87,14 @@ const UsersList = () => {
         dispatch(authActions.logout())
     }
 
+    const openModalHandler = () => {
+        dispatch(modalActions.showModal())
+    }
+
+    const closeModalHandler= () => {
+        dispatch(modalActions.hideModal())
+    }
+
     return (
         <Box style={{height: 700, with: '100%'}}>
             {/* {isAuth &&  */}
@@ -97,7 +106,7 @@ const UsersList = () => {
                 checkboxSelection
             />
             <IconBox>
-                <Fab color="primary" aria-label="add" size='small'>
+                <Fab color="primary" aria-label="add" size='small' onClick={openModalHandler}>
                     <AddIcon />
                 </Fab>
             <Link to='/' style={{ textDecoration: 'none'}}>
@@ -107,7 +116,7 @@ const UsersList = () => {
             </Link>
             </IconBox>
             {/* </DataGrid> */}
-            <FormModal />
+            {isShow && <FormModal isShow={isShow} ishide={closeModalHandler} />}
         </Box>
     )
 }

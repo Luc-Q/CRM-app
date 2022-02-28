@@ -35,12 +35,17 @@ const style = {
   p: 1,
 };
 
-const FormModal = () => {
+const FormModal = ({
+  isShow,
+  ishide,
+}) => {
     return (
-      <div>
+      <form>
         <Modal
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+          open={isShow}
+          onClose={ishide}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
         >
           <Box sx={style}>
             <div>Add New Customer</div>
@@ -92,12 +97,12 @@ const FormModal = () => {
                 <Divider component="li" />
               </List>
                 <Input>
-                  <Button variant='contained'>Cancel</Button>
-                  <Button variant='contained'>Submit</Button>
+                  <Button variant='contained' onClick={ishide}>Cancel</Button>
+                  <Button variant='contained' type='submit'>Submit</Button>
                 </Input>
           </Box>
         </Modal>
-      </div>
+      </form>
     )
 }
 
