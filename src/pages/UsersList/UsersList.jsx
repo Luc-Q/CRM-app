@@ -61,9 +61,6 @@ const columns = [
 
 const UsersList = () => {
     const dispatch = useDispatch()
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
 
     const isAuth = useSelector((state) => state.auth.isAuthed) 
     const users = useSelector((state) => state.usersList.users)
@@ -110,7 +107,7 @@ const UsersList = () => {
             </Link>
             </IconBox>
             {/* </DataGrid> */}
-            <FormModal onOpen={handleOpen} onClose={handleClose}/>
+            <FormModal />
         </Box>
     )
 }
