@@ -1,21 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Box from '@mui/material/Box';
-import InputAdornment from '@mui/material/InputAdornment';
-import styled from 'styled-components'
+
 import Modal from '@mui/material/Modal';
-import { TextField } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
-import HomeIcon from '@mui/icons-material/Home';
-import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
-import WorkIcon from '@mui/icons-material/Work';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import Button from '@mui/material/Button';
-import validator from 'validator';
-import { useDispatch } from 'react-redux';
-import { postUser } from '../../store/actions';
-import { modalActions } from '../../store';
+
 
 const style = {
     position: 'absolute',

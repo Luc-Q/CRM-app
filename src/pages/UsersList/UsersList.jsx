@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom";
 import styled from 'styled-components';
 import Fab from '@mui/material/Fab';
@@ -7,11 +7,12 @@ import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions, modalActions, tokenActions } from '../../store';
-import { getData } from '../../store/actions';
+import { authActions, modalActions, tokenActions, usersActions } from '../../store';
+import { deleteUser, getUsers } from '../../store/actions';
 import FormModal from '../../components/Modal/FormModal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import ViewModal from '../../components/Modal/ViewModal';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Box = styled.div`
     display: flex;
@@ -26,7 +27,13 @@ const IconBox = styled.div`
     position: absolute;
     z-index: 999;
     left: 95%;
-    top: 75%;
+    top: 80%;
+`
+const DeleteIconBox = styled.div`
+    position: absolute;
+    z-index: 999;
+    left: 50%;
+    top: 95%;
 `
 const theme = createTheme({
     status: {
@@ -34,8 +41,8 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#0971f1',
-            darker: '#053e85',
+            main: '#939496',
+            darker: '#4d4d4d',
         },
         neutral: {
             main: '#01ffcd',
@@ -53,10 +60,26 @@ const UsersList = () => {
     const isViewModalShow = useSelector((state) => state.modal.isViewModalShowed)
     const isRefresh = useSelector((state) => state.page.refresh)
 
-    useEffect(() => {
+    const [arrIds, setArrIds] = useState([])
+    const [isSelected, setIsSelected] = useState(false)
 
-        dispatch(getData())
-        
+    // const users = [
+    //     { id: 1, name: 'Snow', email: 'Jon', phoneNumber: 35 },
+    //     { id: 2, name: 'Lannister', email: 'Cersei', phoneNumber: 42 },
+    //     { id: 3, name: 'Lannister', email: 'Jaime', phoneNumber: 45 },
+    //     { id: 4, name: 'Stark', email: 'Arya', phoneNumber: 16 },
+    //     { id: 5, name: 'Targaryen', email: 'Daenerys', phoneNumber: null },
+    //     { id: 6, name: 'Melisandre', email: null, phoneNumber: 150 },
+    //     { id: 7, name: 'Clifford', email: 'Ferrara', phoneNumber: 44 },
+    //     { id: 8, name: 'Frances', email: 'Rossini', phoneNumber: 36 },
+    //     { id: 9, name: 'Roxie', email: 'Harvey', phoneNumber: 65 },
+    // ];
+
+    useEffect(() => {
+        dispatch(getUsers())
+    }, [isRefresh, dispatch])
+
+    useEffect(() => {
         const user = localStorage.getItem('token')
         if (user !== null) {
             dispatch(authActions.login())
@@ -66,7 +89,7 @@ const UsersList = () => {
         //         dispatch(authActions.logout())
         //     }, 10000)
         }
-    }, [isAuth, isRefresh, dispatch])
+    }, [isAuth])
 
     const onLogOutHandler = () => {
         dispatch(tokenActions.removeAll())
@@ -88,6 +111,12 @@ const UsersList = () => {
 
     const closeViewModalHandler = () => {
         dispatch(modalActions.hidViewModal())
+    }
+
+    const deleteHandler = () => {
+        // console.log(arrIds)
+        dispatch(deleteUser(arrIds))
+        setIsSelected(false)
     }
 
     const columns = [
@@ -133,19 +162,31 @@ const UsersList = () => {
                 columns={columns}
                 pageSize={15}
                 checkboxSelection
+                disableSelectionOnClick
+                onSelectionModelChange={(ids) => {
+                        setArrIds(ids)
+                        setIsSelected(true)
+                }}
             />
-            <IconBox>
-                <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme}>
+                <IconBox>
                     <Fab aria-label="add" size='small' onClick={openFormModalHandler} color='neutral'>
                         <AddIcon />
                     </Fab>
                     <Link to='/' style={{ textDecoration: 'none'}}>
-                        <Fab aria-label="logout" size='small' onClick={onLogOutHandler} color='neutral'> 
+                        <Fab aria-label="logout" size='small' onClick={onLogOutHandler} color='primary'> 
                             <LogoutIcon />
                         </Fab>
                     </Link>
-                </ThemeProvider>
-            </IconBox>
+                </IconBox>
+                {isSelected &&                
+                    <DeleteIconBox>
+                        <Fab aria-label="delete" size='small' variant='extended' onClick={deleteHandler} color='primary'>
+                            <DeleteIcon /> DELETE {arrIds.length} DATA
+                        </Fab>
+                    </DeleteIconBox>
+                }
+            </ThemeProvider>
             {isFormModalShow && <FormModal isShow={isFormModalShow} ishide={closeFormModalHandler} />}
             {isViewModalShow && <ViewModal isShow={isViewModalShow} ishide={closeViewModalHandler}/>}
         </Box>
