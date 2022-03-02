@@ -94,7 +94,7 @@ const FormModal = ({
 
     if (emailIsValied) {
       dispatch(postUser(payload))
-      dispatch(modalActions.hideModal())
+      dispatch(modalActions.hideFormModal())
     }
 }
 

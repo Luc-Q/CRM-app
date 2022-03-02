@@ -23,7 +23,7 @@ export const getAccessToken = (payload) => {
     }
 }
 
-export const getData = () => {
+export const getUsers= () => {
     return async dispatch => {
         const sendGetRequest = async () => {
             const res = await MalihAuth.get('getAllUploadedEmails/listId/480')
@@ -52,6 +52,24 @@ export const postUser = (payload) => {
             await sendPostRequest()
             await dispatch(pageActions.refreshPage())
         } catch(error) {
+            console.log(error)
+        }
+    }
+}
+
+export const deleteUser = (payload) => {
+    return async dispatch => {
+        const sendDeleteRequest = async () => {
+            console.log(payload)
+            const res = await MalihAuth.delete('deleteEmails', payload)
+            console.log(res)
+        }
+
+        try{
+            await sendDeleteRequest()
+            await dispatch(usersActions.removeUser(payload))
+            await dispatch(pageActions.refreshPage())
+        } catch (error) {
             console.log(error)
         }
     }
