@@ -1,15 +1,23 @@
 import React from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import LoginPage from './pages/LoginPage/LoginPage';
 import UsersList from "./pages/UsersList/UsersList";
+import UserDetail from "./pages/UserDetail/UserDetail"
 
 function App() {
 
   return (
-    <Routes>
-      <Route path='/' element={<LoginPage />} />
-      <Route path='/userslist' element={<UsersList />} />
-    </Routes>
+    <Switch>
+      <Route path='/' exact>
+        <LoginPage />
+      </Route>
+      <Route path='/users' exact>
+        <UsersList />
+      </Route>
+      <Route path='/users/:userId'>
+        <UserDetail />
+      </Route>
+    </Switch>
   );
 }
 

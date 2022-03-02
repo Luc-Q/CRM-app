@@ -129,7 +129,7 @@ const LoginPage = () => {
                 {isAuth && <Button variant='outlined' color='neutral' onClick={onLogOutHandler}>
                         LOG OUT
                     </Button>}
-                <Link to='/userslist' style={{ textDecoration:'none'}}>
+                <Link to='/users' style={{ textDecoration:'none'}}>
                     {isAuth && <Button variant='outlined' color='neutral'>
                         UsersList
                     </Button>}
