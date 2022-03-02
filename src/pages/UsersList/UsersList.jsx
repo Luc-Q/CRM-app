@@ -7,7 +7,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions, modalActions, tokenActions, usersActions } from '../../store';
+import { authActions, modalActions, tokenActions } from '../../store';
 import { deleteUser, getUsers } from '../../store/actions';
 import FormModal from '../../components/Modal/FormModal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -62,9 +62,10 @@ const UsersList = () => {
 
     const [arrIds, setArrIds] = useState([])
     const [isSelected, setIsSelected] = useState(false)
+    const [rowData, setRowData] = useState({})
 
     // const users = [
-    //     { id: 1, name: 'Snow', email: 'Jon', phoneNumber: 35 },
+    //     { id: 1, name: 'Snow', email: 'Jonasotestn@test.com', phoneNumber: 357789789 },
     //     { id: 2, name: 'Lannister', email: 'Cersei', phoneNumber: 42 },
     //     { id: 3, name: 'Lannister', email: 'Jaime', phoneNumber: 45 },
     //     { id: 4, name: 'Stark', email: 'Arya', phoneNumber: 16 },
@@ -89,7 +90,7 @@ const UsersList = () => {
         //         dispatch(authActions.logout())
         //     }, 10000)
         }
-    }, [isAuth])
+    }, [isAuth, dispatch])
 
     const onLogOutHandler = () => {
         dispatch(tokenActions.removeAll())
@@ -100,8 +101,8 @@ const UsersList = () => {
         dispatch(modalActions.showFormModal())
     }
 
-    const openViewModalHandler = (e) => {
-        e.stopPropagation()
+    const openViewModalHandler = () => {
+        console.log(rowData)
         dispatch(modalActions.showViewModal())
     }
 
@@ -114,9 +115,12 @@ const UsersList = () => {
     }
 
     const deleteHandler = () => {
-        // console.log(arrIds)
         dispatch(deleteUser(arrIds))
         setIsSelected(false)
+    }
+
+    const getRowData = (data) => {
+        setRowData(data)
     }
 
     const columns = [
@@ -144,11 +148,9 @@ const UsersList = () => {
             width: 100,
             renderCell: () => {
                 return (
-                        // <Link to={`/users/${users.id}`} style={{ textDecoration:'none'}}>
                     <ThemeProvider theme={theme}>
                         <Button  onClick={openViewModalHandler} variant="contained" color='neutral'>View</Button>
                     </ThemeProvider>
-                        // </Link>
                     )
             },
         },
@@ -157,15 +159,16 @@ const UsersList = () => {
     return (
         <Box style={{height: 700, with: '100%'}}>
             <DataGrid
-                key={users.id}
+                id={users.id}
                 rows={users}
                 columns={columns}
                 pageSize={15}
                 checkboxSelection
                 disableSelectionOnClick
+                onRowClick={getRowData}
                 onSelectionModelChange={(ids) => {
-                        setArrIds(ids)
-                        setIsSelected(true)
+                    setArrIds(ids)
+                    setIsSelected(true)
                 }}
             />
             <ThemeProvider theme={theme}>
@@ -188,7 +191,7 @@ const UsersList = () => {
                 }
             </ThemeProvider>
             {isFormModalShow && <FormModal isShow={isFormModalShow} ishide={closeFormModalHandler} />}
-            {isViewModalShow && <ViewModal isShow={isViewModalShow} ishide={closeViewModalHandler}/>}
+            {isViewModalShow && <ViewModal isShow={isViewModalShow} ishide={closeViewModalHandler} user={rowData}/>}
         </Box>
     )
 }

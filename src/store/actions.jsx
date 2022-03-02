@@ -14,9 +14,18 @@ export const getAccessToken = (payload) => {
             localStorage.setItem('tRef', res.data.data.tenantReference)
         }
 
+        // const sendGetRequest = async () => {
+        //     const res = await MalihAuth.get('getAllUploadedEmails/listId/480')
+        //     const data = res.data
+        //     return data
+        // }
+
         try{
             await sendPostRequest()
             await sendRequest()
+            // const userData = await sendGetRequest()
+            // const reverseUserData = userData.reverse()
+            // dispatch(usersActions.setUser(reverseUserData))
         } catch(error) {
             console.log(error)
         }
