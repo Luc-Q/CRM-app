@@ -11,6 +11,7 @@ import { authActions, modalActions, tokenActions } from '../../store';
 import { getData } from '../../store/actions';
 import FormModal from '../../components/Modal/FormModal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ViewModal from '../../components/Modal/ViewModal';
 
 const Box = styled.div`
     display: flex;
@@ -43,54 +44,13 @@ const theme = createTheme({
         },
     });
 
-const columns = [
-    {field: 'id', headerName: 'ID', width: 80},
-    {field: 'name', headerName: 'Name', width: 130},
-    {field: 'email', headerName: 'Email', width: 250},
-    {field: 'phoneNumber', headerName: 'Phone Number', width: 200},
-    {field: 'address', headerName: 'Address', width: 400},
-    {field: 'jobTitle', headerName: 'Job Title', width: 150},
-    {
-        field: 'edit',
-        headerName: 'Edit',
-        width: 100,
-        renderCell: () => {
-            const onClick = (e) => {
-                e.stopPropagation()
-            };
-    
-        return (
-                <ThemeProvider theme={theme}>
-                    <Button onClick={onClick} variant="outlined" color='neutral'>Edit</Button>
-                </ThemeProvider>
-        )
-        },
-    },
-    {
-        field: 'view',
-        headerName: 'View',
-        width: 100,
-        renderCell: (users) => {
-            const onClick = (e) => {
-                e.stopPropagation()
-        }
-        return (
-            <Link to={`/users/${users.id}`} style={{ textDecoration:'none'}}>
-                <ThemeProvider theme={theme}>
-                    <Button onClick={onClick} variant="contained" color='neutral'>View</Button>
-                </ThemeProvider>
-            </Link>
-        )
-        },
-    },
-]
-
 const UsersList = () => {
     const dispatch = useDispatch()
 
     const isAuth = useSelector((state) => state.auth.isAuthed) 
     const users = useSelector((state) => state.usersList.users)
-    const isShow = useSelector((state) => state.modal.isShowed)
+    const isFormModalShow = useSelector((state) => state.modal.isFormModalShowed)
+    const isViewModalShow = useSelector((state) => state.modal.isViewModalShowed)
     const isRefresh = useSelector((state) => state.page.refresh)
 
     useEffect(() => {
@@ -113,13 +73,57 @@ const UsersList = () => {
         dispatch(authActions.logout())
     }
 
-    const openModalHandler = () => {
-        dispatch(modalActions.showModal())
+    const openFormModalHandler = () => {
+        dispatch(modalActions.showFormModal())
     }
 
-    const closeModalHandler= () => {
-        dispatch(modalActions.hideModal())
+    const openViewModalHandler = (e) => {
+        e.stopPropagation()
+        dispatch(modalActions.showViewModal())
     }
+
+    const closeFormModalHandler = () => {
+        dispatch(modalActions.hideFormModal())
+    }
+
+    const closeViewModalHandler = () => {
+        dispatch(modalActions.hidViewModal())
+    }
+
+    const columns = [
+        {field: 'id', headerName: 'ID', width: 80},
+        {field: 'name', headerName: 'Name', width: 130},
+        {field: 'email', headerName: 'Email', width: 250},
+        {field: 'phoneNumber', headerName: 'Phone Number', width: 200},
+        {field: 'address', headerName: 'Address', width: 400},
+        {field: 'jobTitle', headerName: 'Job Title', width: 150},
+        {
+            field: 'edit',
+            headerName: 'Edit',
+            width: 100,
+            renderCell: () => {
+            return (
+                    <ThemeProvider theme={theme}>
+                        <Button variant="outlined" color='neutral'>Edit</Button>
+                    </ThemeProvider>
+            )
+            },
+        },
+        {
+            field: 'view',
+            headerName: 'View',
+            width: 100,
+            renderCell: () => {
+                return (
+                        // <Link to={`/users/${users.id}`} style={{ textDecoration:'none'}}>
+                    <ThemeProvider theme={theme}>
+                        <Button  onClick={openViewModalHandler} variant="contained" color='neutral'>View</Button>
+                    </ThemeProvider>
+                        // </Link>
+                    )
+            },
+        },
+    ]
 
     return (
         <Box style={{height: 700, with: '100%'}}>
@@ -132,7 +136,7 @@ const UsersList = () => {
             />
             <IconBox>
                 <ThemeProvider theme={theme}>
-                    <Fab aria-label="add" size='small' onClick={openModalHandler} color='neutral'>
+                    <Fab aria-label="add" size='small' onClick={openFormModalHandler} color='neutral'>
                         <AddIcon />
                     </Fab>
                     <Link to='/' style={{ textDecoration: 'none'}}>
@@ -142,7 +146,8 @@ const UsersList = () => {
                     </Link>
                 </ThemeProvider>
             </IconBox>
-            {isShow && <FormModal isShow={isShow} ishide={closeModalHandler} />}
+            {isFormModalShow && <FormModal isShow={isFormModalShow} ishide={closeFormModalHandler} />}
+            {isViewModalShow && <ViewModal isShow={isViewModalShow} ishide={closeViewModalHandler}/>}
         </Box>
     )
 }

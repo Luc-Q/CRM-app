@@ -56,18 +56,25 @@ const usersListSlice = createSlice({
 })
 
 const initialMoadalState = {
-    isShowed: false
+    isFormModalShowed: false,
+    isViewModalShowed: false
 }
 
 const modalSlice = createSlice({
     name: 'moadal',
     initialState: initialMoadalState,
     reducers: {
-        showModal: (state) => {
-            state.isShowed = true
+        showFormModal: (state) => {
+            state.isFormModalShowed = true
         },
-        hideModal: (state) => {
-            state.isShowed = false
+        hideFormModal: (state) => {
+            state.isFormModalShowed = false
+        },
+        showViewModal: (state) => {
+            state.isViewModalShowed = true
+        },
+        hidViewModal: (state) => {
+            state.isViewModalShowed = false
         }
     }
 })
