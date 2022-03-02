@@ -9,7 +9,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions, modalActions, tokenActions } from '../../store';
 import { getData } from '../../store/actions';
-import FormModal from '../../components/Modal.jsx/FormModal';
+import FormModal from '../../components/Modal/FormModal';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const Box = styled.div`
     display: flex;
@@ -26,6 +27,21 @@ const IconBox = styled.div`
     left: 95%;
     top: 75%;
 `
+const theme = createTheme({
+    status: {
+        danger: '#e53e3e',
+    },
+    palette: {
+        primary: {
+            main: '#0971f1',
+            darker: '#053e85',
+        },
+        neutral: {
+            main: '#01ffcd',
+            contrastText: '#fff',
+        },
+        },
+    });
 
 const columns = [
     {field: 'id', headerName: 'ID', width: 80},
@@ -41,20 +57,30 @@ const columns = [
         renderCell: () => {
             const onClick = (e) => {
                 e.stopPropagation()
-        };
+            };
     
-        return <Button onClick={onClick} variant="outlined">Edit</Button>
+        return (
+                <ThemeProvider theme={theme}>
+                    <Button onClick={onClick} variant="outlined" color='neutral'>Edit</Button>
+                </ThemeProvider>
+        )
         },
     },
     {
         field: 'view',
         headerName: 'View',
         width: 100,
-        renderCell: (params) => {
+        renderCell: (users) => {
             const onClick = (e) => {
                 e.stopPropagation()
         }
-        return <Button onClick={onClick} variant="contained">View</Button>
+        return (
+            <Link to={`/users/${users.id}`} style={{ textDecoration:'none'}}>
+                <ThemeProvider theme={theme}>
+                    <Button onClick={onClick} variant="contained" color='neutral'>View</Button>
+                </ThemeProvider>
+            </Link>
+        )
         },
     },
 ]
@@ -105,14 +131,16 @@ const UsersList = () => {
                 checkboxSelection
             />
             <IconBox>
-                <Fab color="primary" aria-label="add" size='small' onClick={openModalHandler}>
-                    <AddIcon />
-                </Fab>
-                <Link to='/' style={{ textDecoration: 'none'}}>
-                    <Fab color="primary" aria-label="add" size='small' onClick={onLogOutHandler}> 
-                        <LogoutIcon />
+                <ThemeProvider theme={theme}>
+                    <Fab aria-label="add" size='small' onClick={openModalHandler} color='neutral'>
+                        <AddIcon />
                     </Fab>
-                </Link>
+                    <Link to='/' style={{ textDecoration: 'none'}}>
+                        <Fab aria-label="logout" size='small' onClick={onLogOutHandler} color='neutral'> 
+                            <LogoutIcon />
+                        </Fab>
+                    </Link>
+                </ThemeProvider>
             </IconBox>
             {isShow && <FormModal isShow={isShow} ishide={closeModalHandler} />}
         </Box>
