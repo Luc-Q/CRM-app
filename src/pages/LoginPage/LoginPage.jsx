@@ -11,6 +11,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { authActions, tokenActions } from '../../store';
 import { getAccessToken} from '../../store/actions';
 import validator from 'validator';
+import { getUsers } from '../../store/actions';
 
 const theme = createTheme({
     status: {
@@ -39,6 +40,7 @@ const Box = styled.div`
 const LoginPage = () => {
     const dispatch = useDispatch()
     const isAuth = useSelector((state) => state.auth.isAuthed)
+    // const isRefresh = useSelector((state) => state.page.refresh)
     
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -86,6 +88,10 @@ const LoginPage = () => {
         //     }, 15000)
         }
     }, [isAuth, dispatch])
+
+    // useEffect(() => {
+    //     dispatch(getUsers())
+    // }, [isRefresh, dispatch])
 
     const onLogOutHandler = () => {
         dispatch(tokenActions.removeAll())
