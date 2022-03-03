@@ -1,7 +1,7 @@
 import MalihAuth from "../apis/MalihAuth"
 import { pageActions, usersActions } from "./index"
 
-export const getAccessToken = (payload) => {
+export const getAccessTokenAndUsers = (payload) => {
     return async dispatch => {
         const sendPostRequest = async () => {
             const res = await MalihAuth.post('auth/signin', payload)
@@ -14,18 +14,18 @@ export const getAccessToken = (payload) => {
             localStorage.setItem('tRef', res.data.data.tenantReference)
         }
 
-        // const sendGetRequest = async () => {
-        //     const res = await MalihAuth.get('getAllUploadedEmails/listId/480')
-        //     const data = res.data
-        //     return data
-        // }
+        const sendGetRequest = async () => {
+            const res = await MalihAuth.get('getAllUploadedEmails/listId/480')
+            const data = res.data
+            return data
+        }
 
         try{
             await sendPostRequest()
             await sendRequest()
-            // const userData = await sendGetRequest()
-            // const reverseUserData = userData.reverse()
-            // dispatch(usersActions.setUser(reverseUserData))
+            const userData = await sendGetRequest()
+            const reverseUserData = userData.reverse()
+            dispatch(usersActions.setUser(reverseUserData))
         } catch(error) {
             console.log(error)
         }

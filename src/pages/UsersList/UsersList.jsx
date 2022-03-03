@@ -61,7 +61,6 @@ const UsersList = () => {
     const isRefresh = useSelector((state) => state.page.refresh)
 
     const [arrIds, setArrIds] = useState([])
-    const [isSelected, setIsSelected] = useState(false)
     const [rowData, setRowData] = useState({})
 
     // const users = [
@@ -116,7 +115,6 @@ const UsersList = () => {
 
     const deleteHandler = () => {
         dispatch(deleteUser(arrIds))
-        setIsSelected(false)
     }
 
     const getRowData = (data) => {
@@ -136,9 +134,9 @@ const UsersList = () => {
             width: 100,
             renderCell: () => {
             return (
-                    <ThemeProvider theme={theme}>
-                        <Button variant="outlined" color='neutral'>Edit</Button>
-                    </ThemeProvider>
+                <ThemeProvider theme={theme}>
+                    <Button variant="outlined" color='neutral'>Edit</Button>
+                </ThemeProvider>
             )
             },
         },
@@ -168,7 +166,6 @@ const UsersList = () => {
                 onRowClick={getRowData}
                 onSelectionModelChange={(ids) => {
                     setArrIds(ids)
-                    setIsSelected(true)
                 }}
             />
             <ThemeProvider theme={theme}>
@@ -182,7 +179,7 @@ const UsersList = () => {
                         </Fab>
                     </Link>
                 </IconBox>
-                {isSelected &&                
+                {arrIds.length  &&                
                     <DeleteIconBox>
                         <Fab aria-label="delete" size='small' variant='extended' onClick={deleteHandler} color='primary'>
                             <DeleteIcon /> DELETE {arrIds.length} DATA

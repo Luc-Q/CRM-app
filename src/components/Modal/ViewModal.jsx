@@ -3,6 +3,23 @@ import Box from '@mui/material/Box';
 import styled from 'styled-components'
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+    status: {
+        danger: '#e53e3e',
+    },
+    palette: {
+        primary: {
+            main: '#939496',
+            darker: '#4d4d4d',
+        },
+        neutral: {
+            main: '#01ffcd',
+            contrastText: '#fff',
+        },
+        },
+    });
 
 const style = {
     position: 'absolute',
@@ -54,9 +71,11 @@ const ViewModal = ({
                     <Boxes>Home Address:<br/>{user.row.address}</Boxes>
                     <Boxes>Job Title:<br/>{user.row.jobTitle}</Boxes>
                 </Container>
-                <ButtonContainer>
-                    <Button variant='contained' onClick={ishide}>CLOSE</Button>
-                </ButtonContainer>
+                <ThemeProvider theme={theme}>
+                    <ButtonContainer>
+                        <Button variant='contained' color='primary' onClick={ishide}>CLOSE</Button>
+                    </ButtonContainer>
+                </ThemeProvider>
             </Box>
         </Modal>
     )
