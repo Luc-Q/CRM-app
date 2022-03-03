@@ -60,7 +60,6 @@ const FormModal = ({
   isShow,
   ishide,
   user,
-  id
 }) => {
   const dispatch = useDispatch()
 
@@ -272,8 +271,6 @@ const onEditSubmitHandler = (event) => {
                 defaultValue={user.email}
                 inputRef={emailRef}
                 required  
-                error={error} 
-                helperText={error ? 'Please enter valid email adress' : ''}
                 InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

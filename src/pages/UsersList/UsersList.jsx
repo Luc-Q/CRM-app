@@ -54,8 +54,8 @@ const theme = createTheme({
 const UsersList = () => {
     const dispatch = useDispatch()
 
+    const users = useSelector((state) => state.users.users)
     const isAuth = useSelector((state) => state.auth.isAuthed) 
-    const users = useSelector((state) => state.usersList.users)
     const isFormModalShow = useSelector((state) => state.modal.isFormModalShowed)
     const isViewModalShow = useSelector((state) => state.modal.isViewModalShowed)
     const isRefresh = useSelector((state) => state.page.refresh)
@@ -63,19 +63,6 @@ const UsersList = () => {
 
     const [arrIds, setArrIds] = useState([])
     const [rowData, setRowData] = useState({})
-
-    // const userss = [
-    //     { id: 1, name: 'Snow', email: 'Jonasotestn@test.com', phoneNumber: 357789789 },
-    //     { id: 2, name: 'Lannister', email: 'Cersei', phoneNumber: 42 },
-    //     { id: 3, name: 'Lannister', email: 'Jaime', phoneNumber: 45 },
-    //     { id: 4, name: 'Stark', email: 'Arya', phoneNumber: 16 },
-    //     { id: 5, name: 'Targaryen', email: 'Daenerys', phoneNumber: null },
-    //     { id: 6, name: 'Melisandre', email: null, phoneNumber: 150 },
-    //     { id: 7, name: 'Clifford', email: 'Ferrara', phoneNumber: 44 },
-    //     { id: 8, name: 'Frances', email: 'Rossini', phoneNumber: 36 },
-    //     { id: 9, name: 'Roxie', email: 'Harvey', phoneNumber: 65 },
-    // ];
-    
 
     useEffect(() => {
         dispatch(getUsers())
@@ -121,7 +108,6 @@ const UsersList = () => {
     }
 
     const deleteHandler = () => {
-        // console.log(arrIds)
         dispatch(deleteUser(arrIds))
     }
 
@@ -197,7 +183,7 @@ const UsersList = () => {
                     </DeleteIconBox>
                 }
             </ThemeProvider>
-            {isFormModalShow && <FormModal isShow={isFormModalShow} ishide={closeFormModalHandler} user={rowData} id={arrIds}/>}
+            {isFormModalShow && <FormModal isShow={isFormModalShow} ishide={closeFormModalHandler} user={rowData}/>}
             {isViewModalShow && <ViewModal isShow={isViewModalShow} ishide={closeViewModalHandler} user={rowData}/>}
         </Box>
     )
