@@ -88,7 +88,6 @@ const initailPageState = {
     refresh: false,
     loading: false,
     isAdd: false,
-    isEdit: false
 }
 const pageSlice = createSlice({
     name: 'page',
@@ -109,12 +108,6 @@ const pageSlice = createSlice({
         isAddNotClicked: (state) => {
             state.isAdd = false
         },
-        isEditClicked: (state) => {
-            state.isEdit = true
-        },
-        isEditNotCliked: (state) => {
-            state.isEdit = true
-        }
     }
 })
 

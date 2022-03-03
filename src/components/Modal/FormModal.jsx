@@ -16,6 +16,23 @@ import validator from 'validator';
 import { useDispatch, useSelector } from 'react-redux';
 import { postUser, updateUser } from '../../store/actions';
 import { modalActions, pageActions } from '../../store';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+  status: {
+      danger: '#e53e3e',
+  },
+  palette: {
+      primary: {
+          main: '#939496',
+          darker: '#4d4d4d',
+      },
+      neutral: {
+          main: '#01ffcd',
+          contrastText: '#fff',
+      },
+      },
+  });
 
 const InputBox = styled.div`
   display: flex;
@@ -110,29 +127,28 @@ const FormModal = ({
 }
 
 const onEditSubmitHandler = (event) => {
-  event.preventDefault()
+    event.preventDefault()
 
-  const enterName = nameRef.current.value
-  const enterEmail = emailRef.current.value
-  const enterAddress = addressRef.current.value
-  const enterPhone = phoneRef.current.value
-  const enterJob = jobRef.current.value
+    const enterName = nameRef.current.value
+    const enterEmail = emailRef.current.value
+    const enterAddress = addressRef.current.value
+    const enterPhone = phoneRef.current.value
+    const enterJob = jobRef.current.value
 
-  const payload = {
-    "id": user.id,
-    "name": enterName,
-    "email": enterEmail,
-    "address": enterAddress,
-    "phoneNumber": enterPhone,
-    "jobTitle": enterJob,
-    "listId": 480
+    const payload = {
+      "id": user.id,
+      "name": enterName,
+      "email": enterEmail,
+      "address": enterAddress,
+      "phoneNumber": enterPhone,
+      "jobTitle": enterJob,
+      "listId": 480
+    }
+
+    dispatch(pageActions.isLoading())
+    dispatch(updateUser(payload))
+    dispatch(modalActions.hideFormModal())
   }
-  console.log(payload)
-
-  dispatch(pageActions.isLoading())
-  dispatch(updateUser(payload))
-  dispatch(modalActions.hideFormModal())
-}
 
 
     return (
@@ -150,7 +166,12 @@ const onEditSubmitHandler = (event) => {
               <Divider component="li" />
             </List>
             <InputBox>
-              <TextField label="Full Name" variant="outlined" required value={name} onChange={onNameChangeHandler}
+              <TextField 
+                label="Full Name" 
+                variant="outlined" 
+                required 
+                value={name} 
+                onChange={onNameChangeHandler}
                 InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -158,7 +179,13 @@ const onEditSubmitHandler = (event) => {
                   </InputAdornment>
                 ),}} 
               />
-              <TextField label="Email" variant="outlined" required value={email} onChange={onEmailChangeHandler} error={error} helperText={error ? 'Please enter valid email adress' : ''}
+              <TextField 
+                label="Email" 
+                variant="outlined" 
+                required value={email} 
+                onChange={onEmailChangeHandler} 
+                error={error} 
+                helperText={error ? 'Please enter valid email adress' : ''}
                 InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -166,47 +193,66 @@ const onEditSubmitHandler = (event) => {
                   </InputAdornment>
                 ),}}
               />
-              <TextField label="Home Address" variant="outlined" required value={address} onChange={onAddressChangeHandler}
+              <TextField 
+                label="Home Address" 
+                variant="outlined" 
+                required 
+                value={address} 
+                onChange={onAddressChangeHandler}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <HomeIcon />
                     </InputAdornment>
-              ),}}/>
+                  ),}}
+              />
                 <Inputs>
-                  <TextField label="Phone Number" variant="outlined" required value={phone} onChange={onPhoneChangeHandler}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LocalPhoneIcon />
-                    </InputAdornment>
-                ),}}/>
-                  <TextField label="Job Title" variant="outlined" required value={job} onChange={onJobChangeHandler}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <WorkIcon />
-                    </InputAdornment>
-                ),}}/>
+                  <TextField 
+                    label="Phone Number" 
+                    variant="outlined" 
+                    required 
+                    value={phone} 
+                    onChange={onPhoneChangeHandler}
+                    InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                          <LocalPhoneIcon />
+                        </InputAdornment>
+                    ),}}
+                  />
+                  <TextField 
+                    label="Job Title" 
+                    variant="outlined" 
+                    required value={job} 
+                    onChange={onJobChangeHandler}
+                    InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <WorkIcon />
+                      </InputAdornment>
+                    ),}}
+                  />
                 </Inputs>
               </InputBox>
               <List>
                 <Divider component="li" />
               </List>
+              <ThemeProvider theme={theme}>
                 <Inputs>
-                  <Button variant='contained' onClick={ishide}>Cancel</Button>
-                  <Button type="submit" variant='contained'>Submit</Button>
+                  <Button variant='contained' color='primary' onClick={ishide}>Cancel</Button>
+                  <Button type="submit" variant='contained' color='neutral'>Submit</Button>
                 </Inputs>
+                </ThemeProvider>
             </Box>
           </form>
           :
           <form onSubmit={onEditSubmitHandler}>
             <Box sx={style}>
               <div>Edit Customer</div>
-            <List>
-              <Divider component="li" />
-            </List>
-            <InputBox>
+              <List>
+                <Divider component="li" />
+              </List>
+              <InputBox>
               <TextField 
                 label="Full Name" 
                 variant="outlined"
@@ -280,10 +326,12 @@ const onEditSubmitHandler = (event) => {
               <List>
                 <Divider component="li" />
               </List>
+              <ThemeProvider theme={theme}>
                 <Inputs>
-                  <Button variant='contained' onClick={ishide}>Cancel</Button>
-                  <Button type="submit" variant='contained'>Submit</Button>
+                  <Button variant='contained' color='primary' onClick={ishide}>Cancel</Button>
+                  <Button type="submit" variant='contained' color='neutral'>Submit</Button>
                 </Inputs>
+              </ThemeProvider>
             </Box>
           </form> 
           }

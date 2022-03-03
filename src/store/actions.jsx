@@ -91,7 +91,6 @@ export const deleteUser = (payload) => {
 export const updateUser = (payload) => {
     return async dispatch => {
         const sendUpdateRequest = async () => {
-            // console.log(payload)
             const res = await MalihAuth.put('updateEmail', payload)
             console.log(res)
         }

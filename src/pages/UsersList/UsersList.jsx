@@ -75,6 +75,7 @@ const UsersList = () => {
     //     { id: 8, name: 'Frances', email: 'Rossini', phoneNumber: 36 },
     //     { id: 9, name: 'Roxie', email: 'Harvey', phoneNumber: 65 },
     // ];
+    
 
     useEffect(() => {
         dispatch(getUsers())
@@ -120,6 +121,7 @@ const UsersList = () => {
     }
 
     const deleteHandler = () => {
+        // console.log(arrIds)
         dispatch(deleteUser(arrIds))
     }
 
