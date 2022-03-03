@@ -87,3 +87,20 @@ export const deleteUser = (payload) => {
         }
     }
 }
+
+export const updateUser = (payload) => {
+    return async dispatch => {
+        const sendUpdateRequest = async () => {
+            // console.log(payload)
+            const res = await MalihAuth.put('updateEmail', payload)
+            console.log(res)
+        }
+
+        try {
+            await sendUpdateRequest()
+            await dispatch(pageActions.refreshPage())
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}

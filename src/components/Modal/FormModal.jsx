@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import styled from 'styled-components'
@@ -14,7 +14,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import validator from 'validator';
 import { useDispatch, useSelector } from 'react-redux';
-import { postUser } from '../../store/actions';
+import { postUser, updateUser } from '../../store/actions';
 import { modalActions, pageActions } from '../../store';
 
 const InputBox = styled.div`
@@ -23,7 +23,7 @@ const InputBox = styled.div`
   gap: 15px;
   padding: 10px;
 `
-const Input = styled.div`
+const Inputs = styled.div`
   display: flex;
   justify-content: space-between;
 `
@@ -42,12 +42,18 @@ const style = {
 const FormModal = ({
   isShow,
   ishide,
-  user
+  user,
+  id
 }) => {
   const dispatch = useDispatch()
 
   const isAdding = useSelector((state) => state.page.isAdd)
-  // const isEditing = useSelector((state) => state.page.isEdit)
+
+  const nameRef = useRef()
+  const emailRef = useRef()
+  const addressRef = useRef()
+  const phoneRef = useRef()
+  const jobRef = useRef()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -63,11 +69,6 @@ const FormModal = ({
 
   const onNameChangeHandler = (event) => {
     setName(event.target.value)
-  }
-
-  const onDefalutNameChangeHandler = (event) => {
-    // console.log(user)
-    // setName({newName:event.target.value})
   }
 
   const onEmailChangeHandler = (event) => {
@@ -86,11 +87,11 @@ const FormModal = ({
     setJob(event.target.value)
   }
 
-  const onSubmitHandler = (event) => {
+  const onAddSubmitHandler = (event) => {
     event.preventDefault()
+
     const emailIsValied = emailValidation()
     setError(!emailIsValied)
-
 
     const payload = [{
       "name": name,
@@ -108,6 +109,32 @@ const FormModal = ({
     }
 }
 
+const onEditSubmitHandler = (event) => {
+  event.preventDefault()
+
+  const enterName = nameRef.current.value
+  const enterEmail = emailRef.current.value
+  const enterAddress = addressRef.current.value
+  const enterPhone = phoneRef.current.value
+  const enterJob = jobRef.current.value
+
+  const payload = {
+    "id": user.id,
+    "name": enterName,
+    "email": enterEmail,
+    "address": enterAddress,
+    "phoneNumber": enterPhone,
+    "jobTitle": enterJob,
+    "listId": 480
+  }
+  console.log(payload)
+
+  dispatch(pageActions.isLoading())
+  dispatch(updateUser(payload))
+  dispatch(modalActions.hideFormModal())
+}
+
+
     return (
       <Modal
           open={isShow}
@@ -116,7 +143,7 @@ const FormModal = ({
           aria-describedby="modal-modal-description"
       >
         {isAdding ?
-          <form onSubmit={onSubmitHandler}>
+          <form onSubmit={onAddSubmitHandler}>
             <Box sx={style}>
               <div>Add New Customer</div>
             <List>
@@ -146,7 +173,7 @@ const FormModal = ({
                       <HomeIcon />
                     </InputAdornment>
               ),}}/>
-                <Input>
+                <Inputs>
                   <TextField label="Phone Number" variant="outlined" required value={phone} onChange={onPhoneChangeHandler}
                 InputProps={{
                   startAdornment: (
@@ -161,34 +188,46 @@ const FormModal = ({
                       <WorkIcon />
                     </InputAdornment>
                 ),}}/>
-                </Input>
+                </Inputs>
               </InputBox>
               <List>
                 <Divider component="li" />
               </List>
-                <Input>
+                <Inputs>
                   <Button variant='contained' onClick={ishide}>Cancel</Button>
                   <Button type="submit" variant='contained'>Submit</Button>
-                </Input>
+                </Inputs>
             </Box>
           </form>
           :
-          <form onSubmit={onSubmitHandler}>
+          <form onSubmit={onEditSubmitHandler}>
             <Box sx={style}>
               <div>Edit Customer</div>
             <List>
               <Divider component="li" />
             </List>
             <InputBox>
-              <TextField label="Full Name" variant="outlined" required value={user.name} onChange={onNameChangeHandler}
+              <TextField 
+                label="Full Name" 
+                variant="outlined"
+                defaultValue={user.name} 
+                inputRef={nameRef}
+                required 
                 InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <PersonOutlineIcon />
+                    <PersonOutlineIcon /> 
                   </InputAdornment>
                 ),}} 
               />
-              <TextField label="Email" variant="outlined" required value={email} onChange={onEmailChangeHandler} error={error} helperText={error ? 'Please enter valid email adress' : ''}
+              <TextField 
+                label="Email" 
+                variant="outlined" 
+                defaultValue={user.email}
+                inputRef={emailRef}
+                required  
+                error={error} 
+                helperText={error ? 'Please enter valid email adress' : ''}
                 InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -196,37 +235,55 @@ const FormModal = ({
                   </InputAdornment>
                 ),}}
               />
-              <TextField label="Home Address" variant="outlined" required value={address} onChange={onAddressChangeHandler}
+              <TextField 
+                label="Home Address" 
+                variant="outlined" 
+                defaultValue={user.address}
+                inputRef={addressRef}
+                required 
                 InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <HomeIcon />
-                    </InputAdornment>
-              ),}}/>
-                <Input>
-                  <TextField label="Phone Number" variant="outlined" required value={phone} onChange={onPhoneChangeHandler}
-                InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <HomeIcon />
+                  </InputAdornment>
+                ),}}
+              />
+              <Inputs>
+                <TextField 
+                  label="Phone Number" 
+                  variant="outlined" 
+                  required
+                  defaultValue={user.phoneNumber}
+                  inputRef={phoneRef}
+                  InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <LocalPhoneIcon />
                     </InputAdornment>
-                ),}}/>
-                  <TextField label="Job Title" variant="outlined" required value={job} onChange={onJobChangeHandler}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <WorkIcon />
-                    </InputAdornment>
-                ),}}/>
-                </Input>
+                  ),}}
+                />
+                <TextField 
+                  label="Job Title" 
+                  variant="outlined" 
+                  defaultValue={user.jobTitle}
+                  inputRef={jobRef}
+                  required 
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <WorkIcon />
+                      </InputAdornment>
+                  ),}}
+                />
+              </Inputs>
               </InputBox>
               <List>
                 <Divider component="li" />
               </List>
-                <Input>
+                <Inputs>
                   <Button variant='contained' onClick={ishide}>Cancel</Button>
                   <Button type="submit" variant='contained'>Submit</Button>
-                </Input>
+                </Inputs>
             </Box>
           </form> 
           }
