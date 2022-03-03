@@ -59,6 +59,7 @@ const UsersList = () => {
     const isFormModalShow = useSelector((state) => state.modal.isFormModalShowed)
     const isViewModalShow = useSelector((state) => state.modal.isViewModalShowed)
     const isRefresh = useSelector((state) => state.page.refresh)
+    const isLoading = useSelector((state) => state.page.loading)
 
     const [arrIds, setArrIds] = useState([])
     const [rowData, setRowData] = useState({})
@@ -164,6 +165,7 @@ const UsersList = () => {
                 checkboxSelection
                 disableSelectionOnClick
                 onRowClick={getRowData}
+                loading={isLoading}
                 onSelectionModelChange={(ids) => {
                     setArrIds(ids)
                 }}

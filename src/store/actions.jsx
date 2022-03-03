@@ -21,11 +21,13 @@ export const getAccessTokenAndUsers = (payload) => {
         }
 
         try{
+            dispatch(pageActions.isLoading())
             await sendPostRequest()
             await sendRequest()
             const userData = await sendGetRequest()
             const reverseUserData = userData.reverse()
             dispatch(usersActions.setUser(reverseUserData))
+            await dispatch(pageActions.isNotLoading())
         } catch(error) {
             console.log(error)
         }
@@ -41,9 +43,11 @@ export const getUsers= () => {
         }
 
         try {
-        const userData = await sendGetRequest()
-        const reverseUserData = userData.reverse()
-        dispatch(usersActions.setUser(reverseUserData))
+            dispatch(pageActions.isLoading())
+            const userData = await sendGetRequest()
+            const reverseUserData = userData.reverse()
+            dispatch(usersActions.setUser(reverseUserData))
+            await dispatch(pageActions.isNotLoading())
         } catch(error) {
             console.log(error)
         }
