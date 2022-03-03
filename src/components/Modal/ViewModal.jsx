@@ -64,12 +64,12 @@ const ViewModal = ({
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
-                <h3>{`List 480 - ${user.row.name} (ID: ${user.row.id})`}</h3>
+                <h3>{`List 480 - ${user.name} (ID: ${user.id})`}</h3>
                 <Container>
-                    <Boxes>Email:<br/>{user.row.email}</Boxes>
-                    <Boxes>Phone Number:<br/>{user.row.phoneNumber}</Boxes>
-                    <Boxes>Home Address:<br/>{user.row.address}</Boxes>
-                    <Boxes>Job Title:<br/>{user.row.jobTitle}</Boxes>
+                    <Boxes>Email:<br/>{user.email}</Boxes>
+                    <Boxes>Phone Number:<br/>{user.phoneNumber}</Boxes>
+                    <Boxes>Home Address:<br/>{user.address}</Boxes>
+                    <Boxes>Job Title:<br/>{user.jobTitle}</Boxes>
                 </Container>
                 <ThemeProvider theme={theme}>
                     <ButtonContainer>

@@ -86,7 +86,9 @@ const modalSlice = createSlice({
 
 const initailPageState = {
     refresh: false,
-    loading: false
+    loading: false,
+    isAdd: false,
+    isEdit: false
 }
 const pageSlice = createSlice({
     name: 'page',
@@ -100,6 +102,18 @@ const pageSlice = createSlice({
         },
         isNotLoading: (state) => {
             state.loading = false
+        },
+        isAddClicked: (state) => {
+            state.isAdd = true
+        },
+        isAddNotClicked: (state) => {
+            state.isAdd = false
+        },
+        isEditClicked: (state) => {
+            state.isEdit = true
+        },
+        isEditNotCliked: (state) => {
+            state.isEdit = true
         }
     }
 })

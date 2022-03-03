@@ -7,7 +7,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions, modalActions, tokenActions } from '../../store';
+import { authActions, modalActions, pageActions, tokenActions } from '../../store';
 import { deleteUser, getUsers } from '../../store/actions';
 import FormModal from '../../components/Modal/FormModal';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -64,17 +64,17 @@ const UsersList = () => {
     const [arrIds, setArrIds] = useState([])
     const [rowData, setRowData] = useState({})
 
-    // const users = [
-    //     { id: 1, name: 'Snow', email: 'Jonasotestn@test.com', phoneNumber: 357789789 },
-    //     { id: 2, name: 'Lannister', email: 'Cersei', phoneNumber: 42 },
-    //     { id: 3, name: 'Lannister', email: 'Jaime', phoneNumber: 45 },
-    //     { id: 4, name: 'Stark', email: 'Arya', phoneNumber: 16 },
-    //     { id: 5, name: 'Targaryen', email: 'Daenerys', phoneNumber: null },
-    //     { id: 6, name: 'Melisandre', email: null, phoneNumber: 150 },
-    //     { id: 7, name: 'Clifford', email: 'Ferrara', phoneNumber: 44 },
-    //     { id: 8, name: 'Frances', email: 'Rossini', phoneNumber: 36 },
-    //     { id: 9, name: 'Roxie', email: 'Harvey', phoneNumber: 65 },
-    // ];
+    const userss = [
+        { id: 1, name: 'Snow', email: 'Jonasotestn@test.com', phoneNumber: 357789789 },
+        { id: 2, name: 'Lannister', email: 'Cersei', phoneNumber: 42 },
+        { id: 3, name: 'Lannister', email: 'Jaime', phoneNumber: 45 },
+        { id: 4, name: 'Stark', email: 'Arya', phoneNumber: 16 },
+        { id: 5, name: 'Targaryen', email: 'Daenerys', phoneNumber: null },
+        { id: 6, name: 'Melisandre', email: null, phoneNumber: 150 },
+        { id: 7, name: 'Clifford', email: 'Ferrara', phoneNumber: 44 },
+        { id: 8, name: 'Frances', email: 'Rossini', phoneNumber: 36 },
+        { id: 9, name: 'Roxie', email: 'Harvey', phoneNumber: 65 },
+    ];
 
     useEffect(() => {
         dispatch(getUsers())
@@ -97,7 +97,13 @@ const UsersList = () => {
         dispatch(authActions.logout())
     }
 
-    const openFormModalHandler = () => {
+    const openAddFormModalHandler = () => {
+        dispatch(pageActions.isAddClicked())
+        dispatch(modalActions.showFormModal())
+    }
+
+    const openEditFormModalHandler = () => {
+        console.log(rowData)
         dispatch(modalActions.showFormModal())
     }
 
@@ -108,6 +114,7 @@ const UsersList = () => {
 
     const closeFormModalHandler = () => {
         dispatch(modalActions.hideFormModal())
+        dispatch(pageActions.isAddNotClicked())
     }
 
     const closeViewModalHandler = () => {
@@ -119,7 +126,8 @@ const UsersList = () => {
     }
 
     const getRowData = (data) => {
-        setRowData(data)
+        let userData = data.row
+        setRowData(userData)
     }
 
     const columns = [
@@ -136,7 +144,7 @@ const UsersList = () => {
             renderCell: () => {
             return (
                 <ThemeProvider theme={theme}>
-                    <Button variant="outlined" color='neutral'>Edit</Button>
+                    <Button onClick={openEditFormModalHandler} variant="outlined" color='neutral'>Edit</Button>
                 </ThemeProvider>
             )
             },
@@ -172,7 +180,7 @@ const UsersList = () => {
             />
             <ThemeProvider theme={theme}>
                 <IconBox>
-                    <Fab aria-label="add" size='small' onClick={openFormModalHandler} color='neutral'>
+                    <Fab aria-label="add" size='small' onClick={openAddFormModalHandler} color='neutral'>
                         <AddIcon />
                     </Fab>
                     <Link to='/' style={{ textDecoration: 'none'}}>
@@ -189,7 +197,7 @@ const UsersList = () => {
                     </DeleteIconBox>
                 }
             </ThemeProvider>
-            {isFormModalShow && <FormModal isShow={isFormModalShow} ishide={closeFormModalHandler} />}
+            {isFormModalShow && <FormModal isShow={isFormModalShow} ishide={closeFormModalHandler} user={rowData}/>}
             {isViewModalShow && <ViewModal isShow={isViewModalShow} ishide={closeViewModalHandler} user={rowData}/>}
         </Box>
     )

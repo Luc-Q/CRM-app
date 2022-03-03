@@ -13,7 +13,7 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import validator from 'validator';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { postUser } from '../../store/actions';
 import { modalActions, pageActions } from '../../store';
 
@@ -42,8 +42,12 @@ const style = {
 const FormModal = ({
   isShow,
   ishide,
+  user
 }) => {
   const dispatch = useDispatch()
+
+  const isAdding = useSelector((state) => state.page.isAdd)
+  // const isEditing = useSelector((state) => state.page.isEdit)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -59,6 +63,11 @@ const FormModal = ({
 
   const onNameChangeHandler = (event) => {
     setName(event.target.value)
+  }
+
+  const onDefalutNameChangeHandler = (event) => {
+    // console.log(user)
+    // setName({newName:event.target.value})
   }
 
   const onEmailChangeHandler = (event) => {
@@ -106,9 +115,10 @@ const FormModal = ({
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
       >
-        <form onSubmit={onSubmitHandler}>
-          <Box sx={style}>
-            <div>Add New Customer</div>
+        {isAdding ?
+          <form onSubmit={onSubmitHandler}>
+            <Box sx={style}>
+              <div>Add New Customer</div>
             <List>
               <Divider component="li" />
             </List>
@@ -160,8 +170,66 @@ const FormModal = ({
                   <Button variant='contained' onClick={ishide}>Cancel</Button>
                   <Button type="submit" variant='contained'>Submit</Button>
                 </Input>
-          </Box>
-        </form>
+            </Box>
+          </form>
+          :
+          <form onSubmit={onSubmitHandler}>
+            <Box sx={style}>
+              <div>Edit Customer</div>
+            <List>
+              <Divider component="li" />
+            </List>
+            <InputBox>
+              <TextField label="Full Name" variant="outlined" required value={user.name} onChange={onNameChangeHandler}
+                InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PersonOutlineIcon />
+                  </InputAdornment>
+                ),}} 
+              />
+              <TextField label="Email" variant="outlined" required value={email} onChange={onEmailChangeHandler} error={error} helperText={error ? 'Please enter valid email adress' : ''}
+                InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon />
+                  </InputAdornment>
+                ),}}
+              />
+              <TextField label="Home Address" variant="outlined" required value={address} onChange={onAddressChangeHandler}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <HomeIcon />
+                    </InputAdornment>
+              ),}}/>
+                <Input>
+                  <TextField label="Phone Number" variant="outlined" required value={phone} onChange={onPhoneChangeHandler}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LocalPhoneIcon />
+                    </InputAdornment>
+                ),}}/>
+                  <TextField label="Job Title" variant="outlined" required value={job} onChange={onJobChangeHandler}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <WorkIcon />
+                    </InputAdornment>
+                ),}}/>
+                </Input>
+              </InputBox>
+              <List>
+                <Divider component="li" />
+              </List>
+                <Input>
+                  <Button variant='contained' onClick={ishide}>Cancel</Button>
+                  <Button type="submit" variant='contained'>Submit</Button>
+                </Input>
+            </Box>
+          </form> 
+          }
       </Modal>
     )
 }
