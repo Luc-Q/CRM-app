@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import validator from 'validator';
 import { useDispatch } from 'react-redux';
 import { postUser } from '../../store/actions';
-import { modalActions } from '../../store';
+import { modalActions, pageActions } from '../../store';
 
 const InputBox = styled.div`
   display: flex;
@@ -93,6 +93,7 @@ const FormModal = ({
     }]
 
     if (emailIsValied) {
+      dispatch(pageActions.isLoading())
       dispatch(postUser(payload))
       dispatch(modalActions.hideFormModal())
     }

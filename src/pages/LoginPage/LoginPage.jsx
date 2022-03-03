@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import TextField from '@mui/material/TextField';
@@ -8,10 +7,9 @@ import Button from '@mui/material/Button';
 import EmailIcon from '@mui/icons-material/Email';
 import LockIcon from '@mui/icons-material/Lock';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { authActions, tokenActions } from '../../store';
-import { getAccessToken} from '../../store/actions';
+import { authActions } from '../../store';
+import { getAccessTokenAndUsers } from '../../store/actions';
 import validator from 'validator';
-import { getUsers } from '../../store/actions';
 
 const theme = createTheme({
     status: {
@@ -19,8 +17,8 @@ const theme = createTheme({
     },
     palette: {
         primary: {
-            main: '#0971f1',
-            darker: '#053e85',
+            main: '#939496',
+            darker: '#4d4d4d',
         },
         neutral: {
             main: '#01ffcd',
@@ -40,12 +38,10 @@ const Box = styled.div`
 const LoginPage = () => {
     const dispatch = useDispatch()
     const isAuth = useSelector((state) => state.auth.isAuthed)
-    // const isRefresh = useSelector((state) => state.page.refresh)
     
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
-    // const [loading, setLoading] = useState(false)
 
     const onEmailChangeHandler = (event) => {
         setEmail(event.target.value)
@@ -67,7 +63,7 @@ const LoginPage = () => {
         }
 
         if (emailIsValied) {
-            dispatch(getAccessToken(payload))
+            dispatch(getAccessTokenAndUsers(payload))
             dispatch(authActions.login())
         }
     }
@@ -88,15 +84,6 @@ const LoginPage = () => {
         //     }, 15000)
         }
     }, [isAuth, dispatch])
-
-    // useEffect(() => {
-    //     dispatch(getUsers())
-    // }, [isRefresh, dispatch])
-
-    const onLogOutHandler = () => {
-        dispatch(tokenActions.removeAll())
-        dispatch(authActions.logout())
-    }
 
     return (
     <form onSubmit={onSubmitHandler}>
@@ -132,14 +119,6 @@ const LoginPage = () => {
             />
             <ThemeProvider theme={theme}>
                 <Button type="submit" variant="outlined" color='neutral'>LOG IN</Button>
-                {isAuth && <Button variant='outlined' color='neutral' onClick={onLogOutHandler}>
-                        LOG OUT
-                    </Button>}
-                <Link to='/users' style={{ textDecoration:'none'}}>
-                    {isAuth && <Button variant='outlined' color='neutral'>
-                        UsersList
-                    </Button>}
-                </Link>
             </ThemeProvider>
         </Box>
     </form>

@@ -85,7 +85,8 @@ const modalSlice = createSlice({
 })
 
 const initailPageState = {
-    refresh: false
+    refresh: false,
+    loading: false
 }
 const pageSlice = createSlice({
     name: 'page',
@@ -93,6 +94,12 @@ const pageSlice = createSlice({
     reducers: {
         refreshPage: (state) => {
             state.refresh = !state.refresh
+        },
+        isLoading: (state) => {
+            state.loading = true
+        },
+        isNotLoading: (state) => {
+            state.loading = false
         }
     }
 })

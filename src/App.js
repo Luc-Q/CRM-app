@@ -11,10 +11,10 @@ function App() {
   return (
     <Switch>
       <Route path='/' exact>
-        {/* {isAuth && 
+        {isAuth && 
           <Route>
             <Redirect to='/users'/>
-          </Route>} */}
+          </Route>}
         <LoginPage />
       </Route>
       <Route path='/users' exact>
