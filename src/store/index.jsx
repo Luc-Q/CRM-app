@@ -3,7 +3,6 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 const initialAuthState = { 
     isAuthed: false 
 }
-
 const authSlice = createSlice({
     name: 'auth',
     initialState: initialAuthState,
@@ -21,7 +20,6 @@ const initialTokenState = {
     tokenType: '',
     token: ''
 }
-
 const tokenSlice = createSlice({
     name: 'token',
     initialState: initialTokenState,
@@ -41,13 +39,12 @@ const tokenSlice = createSlice({
     }
 })
 
-const initialUsersListState = {
+const initialUsersState = {
     users: []
 }
-
-const usersListSlice = createSlice({
+const usersSlice = createSlice({
     name: 'userList',
-    initialState: initialUsersListState,
+    initialState: initialUsersState,
     reducers: {
         setUser: (state, action) => {
             state.users = action.payload
@@ -55,7 +52,6 @@ const usersListSlice = createSlice({
         removeUser: (state, action) => {
             const arrIds = action.payload
             state.users = state.users.filter((user) => !arrIds.includes(user.id))
-            // state.users = state.users.filter((user) => user.id !== arrIds)
         }
     }
 })
@@ -64,7 +60,6 @@ const initialMoadalState = {
     isFormModalShowed: false,
     isViewModalShowed: false
 }
-
 const modalSlice = createSlice({
     name: 'moadal',
     initialState: initialMoadalState,
@@ -86,7 +81,8 @@ const modalSlice = createSlice({
 
 const initailPageState = {
     refresh: false,
-    loading: false
+    loading: false,
+    isAdd: false,
 }
 const pageSlice = createSlice({
     name: 'page',
@@ -100,17 +96,23 @@ const pageSlice = createSlice({
         },
         isNotLoading: (state) => {
             state.loading = false
-        }
+        },
+        isAddClicked: (state) => {
+            state.isAdd = true
+        },
+        isAddNotClicked: (state) => {
+            state.isAdd = false
+        },
     }
 })
 
 const store = configureStore({
-    reducer: {auth: authSlice.reducer, token: tokenSlice.reducer, usersList: usersListSlice.reducer, modal: modalSlice.reducer, page: pageSlice.reducer}
+    reducer: {auth: authSlice.reducer, token: tokenSlice.reducer, users: usersSlice.reducer, modal: modalSlice.reducer, page: pageSlice.reducer}
 })
 
 export const authActions = authSlice.actions
 export const tokenActions = tokenSlice.actions
-export const usersActions = usersListSlice.actions
+export const usersActions = usersSlice.actions
 export const modalActions = modalSlice.actions
 export const pageActions = pageSlice.actions
 

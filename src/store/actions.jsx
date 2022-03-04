@@ -74,13 +74,31 @@ export const deleteUser = (payload) => {
     return async dispatch => {
         const sendDeleteRequest = async () => {
             console.log(payload)
-            const res = await MalihAuth.delete('deleteEmails', payload)
+            const res = await MalihAuth.delete(`deleteEmails/`, {
+                data: payload
+            })
             console.log(res)
         }
 
         try{
             await sendDeleteRequest()
             await dispatch(usersActions.removeUser(payload))
+            await dispatch(pageActions.refreshPage())
+        } catch (error) {
+            console.log(error)
+        }
+    }
+}
+
+export const updateUser = (payload) => {
+    return async dispatch => {
+        const sendUpdateRequest = async () => {
+            const res = await MalihAuth.put('updateEmail', payload)
+            console.log(res)
+        }
+
+        try {
+            await sendUpdateRequest()
             await dispatch(pageActions.refreshPage())
         } catch (error) {
             console.log(error)

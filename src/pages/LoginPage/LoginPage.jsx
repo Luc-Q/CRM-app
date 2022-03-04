@@ -38,14 +38,13 @@ const Box = styled.div`
 const LoginPage = () => {
     const dispatch = useDispatch()
     const isAuth = useSelector((state) => state.auth.isAuthed)
-    
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
 
     const onEmailChangeHandler = (event) => {
         setEmail(event.target.value)
-        console.log(email)
     }
 
     const onPasswordChangeHandler = (event) => {
@@ -54,6 +53,7 @@ const LoginPage = () => {
 
     const onSubmitHandler = (event) => {
         event.preventDefault()
+
         const emailIsValied = emailValidation()
         setError(!emailIsValied)
 
@@ -91,7 +91,7 @@ const LoginPage = () => {
             <TextField 
                 label="Email" 
                 variant="outlined" 
-                required 
+                required
                 value={email} 
                 onChange={onEmailChangeHandler} 
                 error={error} 
