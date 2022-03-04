@@ -52,7 +52,6 @@ const usersSlice = createSlice({
         removeUser: (state, action) => {
             const arrIds = action.payload
             state.users = state.users.filter((user) => !arrIds.includes(user.id))
-            // state.users = state.users.filter((user) => user.id !== arrIds)
         }
     }
 })

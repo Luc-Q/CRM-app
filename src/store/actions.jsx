@@ -74,7 +74,9 @@ export const deleteUser = (payload) => {
     return async dispatch => {
         const sendDeleteRequest = async () => {
             console.log(payload)
-            const res = await MalihAuth.delete('deleteEmails', payload)
+            const res = await MalihAuth.delete(`deleteEmails/`, {
+                data: payload
+            })
             console.log(res)
         }
 
