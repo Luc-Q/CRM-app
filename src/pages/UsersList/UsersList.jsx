@@ -108,6 +108,7 @@ const UsersList = () => {
     }
 
     const deleteHandler = () => {
+        dispatch(pageActions.isLoading())
         dispatch(deleteUser(arrIds))
     }
 
