@@ -81,11 +81,6 @@ const UsersList = () => {
         const user = localStorage.getItem("token");
         if (user !== null) {
             dispatch(authActions.login());
-            //     setTimeout(() => {
-            //         console.log('time out')
-            //         dispatch(tokenActions.removeAll())
-            //         dispatch(authActions.logout())
-            //     }, 10000)
         }
     }, [isAuth, dispatch]);
 

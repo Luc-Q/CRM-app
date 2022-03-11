@@ -77,11 +77,6 @@ const LoginPage = () => {
         let user = localStorage.getItem("token");
         if (user !== null) {
             dispatch(authActions.login());
-            //     setTimeout(() => {
-            //         console.log('time out')
-            //         dispatch(tokenActions.removeAll())
-            //         dispatch(authActions.logout())
-            //     }, 15000)
         }
     }, [isAuth, dispatch]);
 

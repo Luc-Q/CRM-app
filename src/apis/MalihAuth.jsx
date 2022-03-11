@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const MalihAuth = axios.create({
-    baseURL: "http://malih-auth.ap-southeast-2.elasticbeanstalk.com/api/v1/",
+    baseURL: "",
 });
 
 MalihAuth.interceptors.request.use((config) => {
