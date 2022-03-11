@@ -15,7 +15,7 @@ export const getAccessTokenAndUsers = (payload) => {
         };
 
         const sendGetRequest = async () => {
-            const res = await MalihAuth.get("getAllUploadedEmails/listId/480");
+            const res = await MalihAuth.get("getAllEmails/");
             const data = res.data;
             return data;
         };
@@ -37,7 +37,7 @@ export const getAccessTokenAndUsers = (payload) => {
 export const getUsers = () => {
     return async (dispatch) => {
         const sendGetRequest = async () => {
-            const res = await MalihAuth.get("getAllUploadedEmails/listId/480");
+            const res = await MalihAuth.get("getAllEmails/");
             const data = res.data;
             return data;
         };
@@ -57,7 +57,7 @@ export const getUsers = () => {
 export const postUser = (payload) => {
     return async (dispatch) => {
         const sendPostRequest = async () => {
-            const res = await MalihAuth.post("emailUpload", payload);
+            const res = await MalihAuth.post("Upload", payload);
             console.log(res);
         };
 
@@ -74,7 +74,7 @@ export const deleteUser = (payload) => {
     return async (dispatch) => {
         const sendDeleteRequest = async () => {
             console.log(payload);
-            const res = await MalihAuth.delete(`deleteEmails/`, {
+            const res = await MalihAuth.delete(`delete/`, {
                 data: payload,
             });
             console.log(res);
